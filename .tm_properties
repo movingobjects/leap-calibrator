@@ -1,0 +1,6 @@
+
+windowTitle			= "$TM_DISPLAYNAME — ☹️"
+
+excludeDirectories	= "{$excludeDirectories,node_modules}"
+excludeFiles		= "{$excudeFiles,*.zip}"
+invisiblesMap		= "~ "
