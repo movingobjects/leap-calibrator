@@ -1,13 +1,16 @@
 {
   "name": "leap-prototype",
+  "productName": "Leap Prototype",
   "version": "0.1.0",
   "description": "",
-  "main": "index.js",
+  "main": "main.js",
   "scripts": {
     "build": "webpack",
+    "watch": "webpack --progress --watch",
     "clean": "rm -rf dist/*",
     "serve": "lite-server",
-    "watch": "webpack --progress --watch"
+    "electron": ".webpack && electron .",
+	"package": "webpack && electron-packager . --overwrite --platform=darwin --arch=x64 --out=release-builds --icon=src/static/icons/r1-icon.icns --prune=false"
   },
   "repository": {
     "type": "git",
@@ -28,6 +31,7 @@
     "babel-preset-react": "^6.24.1",
     "copy-webpack-plugin": "4.0.1",
     "css-loader": "0.28.4",
+    "electron-packager": "^8.7.2",
     "html-webpack-include-assets-plugin": "0.0.5",
     "html-webpack-plugin": "2.28.0",
     "lite-server": "^2.3.0",
@@ -38,6 +42,7 @@
     "webpack": "2.6.1"
   },
   "dependencies": {
+    "electron": "^1.7.6",
     "jquery": "^3.2.1",
     "leapjs": "^0.6.4",
     "lodash": "4.17.4",

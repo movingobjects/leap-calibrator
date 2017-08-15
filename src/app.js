@@ -3,9 +3,11 @@ import * as ReactDOM from "react-dom";
 
 import "src/resources/styles/style.scss";
 
-import App from "src/components/App";
+import LeapPrototype from "src/components/LeapPrototype";
 
 ReactDOM.render(
-	<App />,
+	<LeapPrototype />,
 	document.getElementById("app")
 );
+
+

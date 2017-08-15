@@ -23,7 +23,7 @@ const GRID_COLS			= 16,
 // Class
 /////////////////////////////////////////////
 
-export default class App extends React.Component {
+export default class LeapPrototype extends React.Component {
 
 	// React lifecycle
 	/////////////////////////////////////////////

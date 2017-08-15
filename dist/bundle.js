@@ -8733,7 +8733,7 @@ const GRID_COLS = 16,
 // Class
 /////////////////////////////////////////////
 
-class App extends __WEBPACK_IMPORTED_MODULE_2_react__["Component"] {
+class LeapPrototype extends __WEBPACK_IMPORTED_MODULE_2_react__["Component"] {
 
 	// React lifecycle
 	/////////////////////////////////////////////
@@ -8902,7 +8902,7 @@ class App extends __WEBPACK_IMPORTED_MODULE_2_react__["Component"] {
 	}
 
 }
-/* harmony export (immutable) */ __webpack_exports__["a"] = App;
+/* harmony export (immutable) */ __webpack_exports__["a"] = LeapPrototype;
 
 
 /***/ }),
@@ -8954,7 +8954,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_dom___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_react_dom__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_src_resources_styles_style_scss__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_src_resources_styles_style_scss___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_src_resources_styles_style_scss__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_src_components_App__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_src_components_LeapPrototype__ = __webpack_require__(17);
 
 
 
@@ -8962,7 +8962,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
-__WEBPACK_IMPORTED_MODULE_1_react_dom__["render"](__WEBPACK_IMPORTED_MODULE_0_react__["createElement"](__WEBPACK_IMPORTED_MODULE_3_src_components_App__["a" /* default */], null), document.getElementById("app"));
+__WEBPACK_IMPORTED_MODULE_1_react_dom__["render"](__WEBPACK_IMPORTED_MODULE_0_react__["createElement"](__WEBPACK_IMPORTED_MODULE_3_src_components_LeapPrototype__["a" /* default */], null), document.getElementById("app"));
 
 /***/ }),
 /* 21 */
