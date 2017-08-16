@@ -5,12 +5,12 @@
   "description": "",
   "main": "main.js",
   "scripts": {
+    "clean": "rm -rf dist/*",
     "build": "webpack",
     "watch": "webpack --progress --watch",
-    "clean": "rm -rf dist/*",
     "serve": "lite-server",
-    "electron": ".webpack && electron .",
-	"package": "webpack && electron-packager . --overwrite --platform=darwin --arch=x64 --out=release-builds --icon=src/static/icons/r1-icon.icns --prune=false"
+    "electron": "webpack && electron .",
+    "package": "webpack && electron-packager . --overwrite --platform=darwin --arch=x64 --out=release-builds --icon=src/static/icons/r1-icon.icns --prune=false"
   },
   "repository": {
     "type": "git",
