@@ -1,4 +1,4 @@
-# Leap Prototype
+# Leap Calibrator
 
 Demo of Leap Motion controller.
 
