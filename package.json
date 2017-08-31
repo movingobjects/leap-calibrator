@@ -41,7 +41,8 @@
     "leapjs": "^0.6.4",
     "lodash": "4.17.4",
     "react": "15.6.1",
-    "react-dom": "15.6.1"
+    "react-dom": "15.6.1",
+    "varyd-utils": "^0.5.1"
   },
   "babel": {
     "presets": [
