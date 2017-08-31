@@ -1,48 +1,42 @@
 {
-  "name": "leap-prototype",
-  "productName": "Leap Prototype",
+  "name": "leap-calibrator",
+  "productName": "Leap Calibrator",
   "version": "0.1.0",
-  "description": "",
-  "main": "main.js",
+  "description": "Tool that allows calibration of Leap Motion controller via LeapJS",
+  "main": "src/index.js",
   "scripts": {
     "clean": "rm -rf dist/*",
-    "build": "webpack",
-    "watch": "webpack --progress --watch",
-    "serve": "lite-server",
-    "electron": "webpack && electron .",
-    "package": "webpack && electron-packager . --overwrite --platform=darwin --arch=x64 --out=release-builds --icon=src/static/icons/r1-icon.icns --prune=false"
+    "build": "webpack          --config config/webpack.config.js",
+    "watch": "webpack          --config config/webpack.config.js --watch",
+    "dev": "webpack-dev-server --config config/webpack.config.js --hot --inline --open"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/sccottt/leap-prototype.git"
+    "url": "https://github.com/sccottt/leap-calibrator.git"
   },
   "author": "Belle & Wissell, Co.",
-  "license": "UNLICENSED",
-  "private": true,
+  "license": "ISC",
   "bugs": {
-    "url": "https://github.com/sccottt/leap-prototype/issues"
+    "url": "https://github.com/sccottt/leap-calibrator/issues"
   },
-  "homepage": "https://github.com/sccottt/leap-prototype",
+  "homepage": "https://github.com/sccottt/leap-calibrator",
   "devDependencies": {
     "babel-cli": "^6.24.1",
     "babel-core": "^6.25.0",
     "babel-loader": "^7.1.1",
-    "babel-preset-env": "^1.6.0",
     "babel-preset-react": "^6.24.1",
     "copy-webpack-plugin": "4.0.1",
     "css-loader": "0.28.4",
-    "electron-packager": "^8.7.2",
     "html-webpack-include-assets-plugin": "0.0.5",
     "html-webpack-plugin": "2.28.0",
-    "lite-server": "^2.3.0",
     "node-sass": "4.5.3",
     "sass-loader": "6.0.5",
     "source-map-loader": "0.2.1",
     "style-loader": "0.18.2",
-    "webpack": "2.6.1"
+    "webpack": "2.6.1",
+    "webpack-dev-server": "^2.7.1"
   },
   "dependencies": {
-    "electron": "^1.7.6",
     "jquery": "^3.2.1",
     "leapjs": "^0.6.4",
     "lodash": "4.17.4",
