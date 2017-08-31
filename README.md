@@ -1,6 +1,6 @@
 # Leap Calibrator
 
-Demo of Leap Motion controller.
+Tool that allows calibration of Leap Motion controller via [LeapJS](https://github.com/leapmotion/leapjs).
 
 
 ## Tech
