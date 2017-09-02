@@ -21,9 +21,9 @@
   },
   "homepage": "https://github.com/sccottt/leap-calibrator",
   "devDependencies": {
-    "babel-cli": "^6.24.1",
-    "babel-core": "^6.25.0",
-    "babel-loader": "^7.1.1",
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
     "babel-preset-react": "^6.24.1",
     "copy-webpack-plugin": "4.0.1",
     "css-loader": "0.28.4",
@@ -42,7 +42,8 @@
     "lodash": "4.17.4",
     "react": "15.6.1",
     "react-dom": "15.6.1",
-    "varyd-utils": "^0.5.1"
+    "screenfull": "^3.3.1",
+    "varyd-utils": "^0.5.4"
   },
   "babel": {
     "presets": [

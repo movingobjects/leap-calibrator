@@ -45,41 +45,133 @@ export default class ControlsPanel extends React.Component {
     return (
 
       <div className='controls'>
-        <h2>Controls</h2>
 
-        <label>
-          <input
-            type='checkbox'
-            name='invertX'
-            checked={this.props.invertX}
-            onChange={this.props.onControlChange} />
-          Invert X
-        </label>
-        <br />
+        <fieldset>
+          <legend>View</legend>
 
-        <label>
-          <input
-            type='checkbox'
-            name='invertY'
-            checked={this.props.invertY}
-            onChange={this.props.onControlChange} />
-          Invert Y
-        </label>
-        <br />
+          <label>
+            <input
+              type='checkbox'
+              checked={this.props.fullscreen}
+              onChange={this.props.onFullScreenCheckboxChange} />
+            <strong>[F]</strong> Fullscreen
+          </label>
 
-        <label>
-          <input
-            type='checkbox'
-            name='invertZ'
-            checked={this.props.invertZ}
-            onChange={this.props.onControlChange} />
-          Invert Z
-        </label>
+          <br />
+
+          <label>
+            <input
+              type='checkbox'
+              name='showLeapZone'
+              checked={this.props.showLeapZone}
+              onChange={this.props.onControlChange} />
+            <strong>[L]</strong> Show raw leap data view
+          </label>
+
+          <br />
+
+          <label>
+            <input
+              type='checkbox'
+              name='invertX'
+              checked={this.props.invertX}
+              onChange={this.props.onInvertAxisChange} />
+            Invert X
+          </label>
+
+          <label>
+            <input
+              type='checkbox'
+              name='invertY'
+              checked={this.props.invertY}
+              onChange={this.props.onInvertAxisChange} />
+            Invert Y
+          </label>
+
+        </fieldset>
+
+        <fieldset>
+          <legend>App zone</legend>
+
+          <label>
+            <input
+              type='number'
+              name='appMinX'
+              value={this.props.appMinX}
+              onChange={this.props.onControlChange} />
+            x min
+          </label>
+          <label>
+            <input
+              type='number'
+              name='appMaxX'
+              value={this.props.appMaxX}
+              onChange={this.props.onControlChange} />
+            x max
+          </label>
+          <br />
+          <label>
+            <input
+              type='number'
+              name='appMinY'
+              value={this.props.appMinY}
+              onChange={this.props.onControlChange} />
+            y min
+          </label>
+          <label>
+            <input
+              type='number'
+              name='appMaxY'
+              value={this.props.appMaxY}
+              onChange={this.props.onControlChange} />
+            y max
+          </label>
+
+        </fieldset>
+
+        <fieldset>
+          <legend>Leap zone</legend>
+
+          <label>
+            <input
+              type='text'
+              name='leapMinX'
+              value={this.props.leapMinX}
+              readOnly />
+            x min
+          </label>
+          <label>
+            <input
+              type='text'
+              name='leapMaxX'
+              value={this.props.leapMaxX}
+              readOnly />
+            x max
+          </label>
+          <br />
+          <label>
+            <input
+              type='text'
+              name='leapMinY'
+              value={this.props.leapMinY}
+              readOnly />
+            y min
+          </label>
+          <label>
+            <input
+              type='text'
+              name='leapMaxY'
+              value={this.props.leapMaxY}
+              readOnly />
+            y max
+          </label>
+
+        </fieldset>
+
       </div>
 
     );
 
   }
-
 
 }

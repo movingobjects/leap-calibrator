@@ -1,3 +1,83 @@
 
-@import "_reset";
-@import "_app";
+body {
+  margin: 0;
+  padding: 0;
+  background: black;
+  color: white;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+div.controls {
+  position: absolute;
+  top: 25px;
+  left: 25px;
+  padding: 10px;
+  background: white;
+  color: black;
+  font-size: 13px;
+  border-radius: 5px;
+
+  strong {
+    color: #f06;
+  }
+
+  label {
+    display: inline-block;
+    margin-bottom: 5px;
+    & + label {
+      margin-left: 15px;
+    }
+  }
+
+  input {
+    margin-right: 7px;
+
+    &[type=text],
+    &[type=number] {
+      width: 75px;
+    }
+
+  }
+
+  fieldset {
+    border-color: #ccc;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 3px;
+    margin-bottom: 10px;
+
+    legend {
+      color: #f06;
+      font-weight: bold;
+    }
+  }
+
+}
+
+div.appZone {
+  position: absolute;
+  border: 3px solid #ff0066;
+  border-left-color: #ccff00;
+  border-top-color: #ccff00;
+}
+
+ul.hands {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  li.hand {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    background-color: #cf0;
+    width: 50px;
+    height: 50px;
+    border-radius: 50px;
+
+  }
+
+}
