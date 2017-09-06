@@ -37,13 +37,13 @@
     "webpack-dev-server": "^2.7.1"
   },
   "dependencies": {
-    "jquery": "^3.2.1",
     "leapjs": "^0.6.4",
     "lodash": "4.17.4",
     "react": "15.6.1",
     "react-dom": "15.6.1",
     "screenfull": "^3.3.1",
-    "varyd-utils": "^0.5.4"
+    "varyd-utils": "^0.5.4",
+    "classnames": "^2.2.5"
   },
   "babel": {
     "presets": [

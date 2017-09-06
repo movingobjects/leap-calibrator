@@ -52,8 +52,7 @@ module.exports = {
   plugins: [
     new CopyWebpackPlugin([
       { from: 'node_modules/react/dist/react.js', to: 'vendor/react/' },
-      { from: 'node_modules/react-dom/dist/react-dom.js', to: 'vendor/react/' },
-      { from: 'node_modules/jquery/dist/jquery.min.js', to: 'resources/scripts/vendor/jquery/' }
+      { from: 'node_modules/react-dom/dist/react-dom.js', to: 'vendor/react/' }
     ]),
     new HtmlWebpackPlugin({
       filename: 'index.html',
@@ -62,8 +61,7 @@ module.exports = {
     new HtmlWebpackIncludeAssetsPlugin({
       assets: [
         'vendor/react/react.js',
-        'vendor/react/react-dom.js',
-        'resources/scripts/vendor/jquery/jquery.min.js'
+        'vendor/react/react-dom.js'
       ],
       append: false
     })
@@ -71,8 +69,7 @@ module.exports = {
 
   externals: {
     'react': 'React',
-    'react-dom': 'ReactDOM',
-    'jquery': 'jQuery'
+    'react-dom': 'ReactDOM'
   },
 
 };

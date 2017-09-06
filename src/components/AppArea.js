@@ -2,7 +2,6 @@
 // Imports
 
 import * as _ from 'lodash';
-import * as $ from 'jquery';
 import * as React from 'react';
 import * as Leap from 'leapjs';
 
@@ -48,8 +47,6 @@ export default class AppArea extends React.Component {
       this.props.appW,
       this.props.appH
     ).absolutized();
-
-    console.log(r.toString());
 
     return (
 
