@@ -37,12 +37,16 @@ export default class LeapAgent extends Dispatcher {
     return this._xMax;
   }
   set xMin(val) {
-    this._xMin  = val;
-    super.dispatch('zoneUpdate');
+    if (val !== this._xMin) {
+      this._xMin  = val;
+      super.dispatch('zoneUpdate');
+    }
   }
   set xMax(val) {
-    this._xMax  = val;
-    super.dispatch('zoneUpdate');
+    if (val !== this._xMax) {
+      this._xMax  = val;
+      super.dispatch('zoneUpdate');
+    }
   }
 
   get yMin() {
@@ -52,12 +56,16 @@ export default class LeapAgent extends Dispatcher {
     return this._yMax;
   }
   set yMin(val) {
-    this._yMin  = val;
-    super.dispatch('zoneUpdate');
+    if (val !== this._yMin) {
+      this._yMin  = val;
+      super.dispatch('zoneUpdate');
+    }
   }
   set yMax(val) {
-    this._yMax  = val;
-    super.dispatch('zoneUpdate');
+    if (val !== this._yMax) {
+      this._yMax  = val;
+      super.dispatch('zoneUpdate');
+    }
   }
 
   get zMin() {
@@ -67,12 +75,16 @@ export default class LeapAgent extends Dispatcher {
     return this._zMax;
   }
   set zMin(val) {
-    this._zMin  = val;
-    super.dispatch('zoneUpdate');
+    if (val !== this._zMin) {
+      this._zMin  = val;
+      super.dispatch('zoneUpdate');
+    }
   }
   set zMax(val) {
-    this._zMax  = val;
-    super.dispatch('zoneUpdate');
+    if (val !== this._zMax) {
+      this._zMax  = val;
+      super.dispatch('zoneUpdate');
+    }
   }
 
 

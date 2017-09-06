@@ -51,7 +51,7 @@ export default class AppArea extends React.Component {
     return (
 
       <div
-        className='appZone'
+        className='app-zone'
         style={{
           left:   r.x + 'px',
           top:    r.y + 'px',

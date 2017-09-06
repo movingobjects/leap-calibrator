@@ -36,6 +36,17 @@ export default class ControlsPanel extends React.Component {
 
   // Methods
 
+  getAppAreaJSON() {
+
+    return '{\n' +
+      `  xMin: ${this.props.appMinX},\n` +
+      `  xMax: ${this.props.appMaxX},\n` +
+      `  yMin: ${this.props.appMinY},\n` +
+      `  yMax: ${this.props.appMaxY}\n` +
+      '}\n';
+
+  }
+
 
   // React lifecycle
 
@@ -64,10 +75,60 @@ export default class ControlsPanel extends React.Component {
               name='showLeapZone'
               checked={this.props.showLeapZone}
               onChange={this.props.onControlChange} />
-            <strong>[L]</strong> Show raw leap data view
+            <strong>[L]</strong> Show full leap area
           </label>
 
-          <br />
+        </fieldset>
+
+        <fieldset>
+          <legend>App zone</legend>
+
+          <p className='area'>
+            <input
+              className='area-top'
+              type='number'
+              name='appMinY'
+              value={this.props.appMinY}
+              onChange={this.props.onControlChange} />
+            <input
+              className='area-left'
+              type='number'
+              name='appMinX'
+              value={this.props.appMinX}
+              onChange={this.props.onControlChange} />
+            <input
+              className='area-right'
+              type='number'
+              name='appMaxX'
+              value={this.props.appMaxX}
+              onChange={this.props.onControlChange} />
+            <input
+              className='area-btm'
+              type='number'
+              name='appMaxY'
+              value={this.props.appMaxY}
+              onChange={this.props.onControlChange} />
+          </p>
+
+          <p>
+            <button
+              className='recalibrate'
+              onClick={this.props.onRecalibrateClick}>
+              Recalibrate
+            </button>
+          </p>
+
+          <p>
+            <textarea
+              className='raw-json'
+              readOnly
+              value={this.getAppAreaJSON()} />
+          </p>
+
+          </fieldset>
+
+        <fieldset>
+          <legend>Leap zone</legend>
 
           <label>
             <input
@@ -75,7 +136,7 @@ export default class ControlsPanel extends React.Component {
               name='invertX'
               checked={this.props.invertX}
               onChange={this.props.onInvertAxisChange} />
-            Invert X
+            <strong>[X]</strong> Invert X
           </label>
 
           <label>
@@ -84,86 +145,36 @@ export default class ControlsPanel extends React.Component {
               name='invertY'
               checked={this.props.invertY}
               onChange={this.props.onInvertAxisChange} />
-            Invert Y
+            <strong>[Y]</strong> Invert Y
           </label>
 
-        </fieldset>
+          <p className='area'>
 
-        <fieldset>
-          <legend>App zone</legend>
-
-          <label>
             <input
-              type='number'
-              name='appMinX'
-              value={this.props.appMinX}
-              onChange={this.props.onControlChange} />
-            x min
-          </label>
-          <label>
-            <input
-              type='number'
-              name='appMaxX'
-              value={this.props.appMaxX}
-              onChange={this.props.onControlChange} />
-            x max
-          </label>
-          <br />
-          <label>
-            <input
-              type='number'
-              name='appMinY'
-              value={this.props.appMinY}
-              onChange={this.props.onControlChange} />
-            y min
-          </label>
-          <label>
-            <input
-              type='number'
-              name='appMaxY'
-              value={this.props.appMaxY}
-              onChange={this.props.onControlChange} />
-            y max
-          </label>
-
-        </fieldset>
-
-        <fieldset>
-          <legend>Leap zone</legend>
-
-          <label>
-            <input
-              type='text'
-              name='leapMinX'
-              value={this.props.leapMinX}
-              readOnly />
-            x min
-          </label>
-          <label>
-            <input
-              type='text'
-              name='leapMaxX'
-              value={this.props.leapMaxX}
-              readOnly />
-            x max
-          </label>
-          <br />
-          <label>
-            <input
+              className='area-top'
               type='text'
               name='leapMinY'
               value={this.props.leapMinY}
               readOnly />
-            y min
-          </label>
-          <label>
             <input
+              className='area-left'
+              type='text'
+              name='leapMinX'
+              value={this.props.leapMinX}
+              readOnly />
+            <input
+              className='area-right'
+              type='text'
+              name='leapMaxX'
+              value={this.props.leapMaxX}
+              readOnly />
+            <input
+              className='area-btm'
               type='text'
               name='leapMaxY'
               value={this.props.leapMaxY}
               readOnly />
-            y max
-          </label>
+          </p>
 
         </fieldset>
 
