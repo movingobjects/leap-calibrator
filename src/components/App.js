@@ -8,9 +8,10 @@ import * as Leap from 'leapjs';
 import screenfull from 'screenfull';
 import classNames from 'classnames';
 
-import { maths, Rect, Span } from 'varyd-utils';
+import { maths, random, Rect, Span } from 'varyd-utils';
 import LeapAgent from '../utils/LeapAgent';
 
+import ConfidenceGrid from './ConfidenceGrid';
 import ControlsPanel from './ControlsPanel';
 import HandsDisplay from './HandsDisplay';
 import Calibration from './Calibration';
@@ -23,6 +24,8 @@ const CALIBRATION_STEPS         = 4,
       CALIBRATION_MAX_MOVE_DIST = 50,
       CALIBRATION_PAD_PERC      = 0.25;
 
+const CONFIDENCE_GRID_COLS      = 30,
+      CONFIDENCE_GRID_ROWS      = 20;
 
 // Class
 
@@ -38,6 +41,7 @@ export default class App extends React.Component {
     this.initBindings();
     this.initLeap();
     this.initFullscreen();
+    this.initConfidenceGrid()
 
   }
 
@@ -90,7 +94,13 @@ export default class App extends React.Component {
     }
 
   }
-  initCalibration() { }
+  initConfidenceGrid() {
+
+    this.history  = [];
+    this.confidenceGrid = [];
+
+  }
+
 
   // Getters & setters
 
@@ -106,12 +116,14 @@ export default class App extends React.Component {
     switch (e.key) {
 
       case 'f':
+        e.preventDefault();
         this.setState({
           fullscreen: !this.state.fullscreen
         });
         break;
 
       case 'l':
+        e.preventDefault();
         this.setState({
           showLeapZone: !this.state.showLeapZone
         });
@@ -138,6 +150,10 @@ export default class App extends React.Component {
 
     if (this.state.isCalibrating) {
       this.updateCalibration();
+    }
+
+    if (this.handsOn) {
+      this.updateConfidenceGrid();
     }
 
   }
@@ -216,20 +232,22 @@ export default class App extends React.Component {
   }
   getHandsViewData() {
 
-    const showLeapZone = this.state.showLeapZone;
-
     const rectLeap = new Rect(
       this.state.leapMinX,
       this.state.leapMinY,
       this.state.leapMaxX - this.state.leapMinX,
       this.state.leapMaxY - this.state.leapMinY
     );
+
     const rectApp  = new Rect(
       this.state.appMinX,
       this.state.appMinY,
       this.state.appMaxX - this.state.appMinX,
       this.state.appMaxY - this.state.appMinY
     );
+
+    const normRect    = this.state.showLeapZone ? rectLeap : rectApp;
+
     const rectWin  = new Rect(
       0,
       0,
@@ -239,35 +257,23 @@ export default class App extends React.Component {
 
     let hands = [];
 
-    for (let i = 0; i < this.state.hands.length; i++) {
-
-      let hand   = this.state.hands[i];
-
-      if (!hand) continue;
+    this.state.hands.forEach((hand, i) => {
 
       let hue   = maths.lerp(0, 120, hand.confidence),
-          hx,
-          hy;
-
-      if (showLeapZone) {
-        hx  = rectWin.lerpX(rectLeap.normX(hand.x));
-        hy  = rectWin.lerpY(rectLeap.normY(hand.y));
-      } else {
-        hx  = rectWin.lerpX(rectApp.normX(hand.x));
-        hy  = rectWin.lerpY(rectApp.normY(hand.y));
-      }
+          hx    = rectWin.lerpX(normRect.normX(hand.x)),
+          hy    = rectWin.lerpY(normRect.normY(hand.y));
 
       let anyBadVals  = isNaN(hue) || isNaN(hx) || isNaN(hy);
 
       if (!anyBadVals) {
         hands.push({
-          color: `hsl(${hue}, 100%, 50%)`,
-          x: Math.round(hx),
-          y: Math.round(hy)
+          backgroundColor: `hsl(${hue}, 100%, 50%)`,
+          left: Math.round(hx) + 'px',
+          top: Math.round(hy) + 'px'
         });
       }
 
-    }
+    })
 
     return hands;
 
@@ -436,6 +442,54 @@ export default class App extends React.Component {
 
   }
 
+  updateConfidenceGrid() {
+
+    const MAX_HISTORY = 10000;
+
+    const rectLeap    = new Rect(
+      this.state.leapMinX,
+      this.state.leapMinY,
+      this.state.leapMaxX - this.state.leapMinX,
+      this.state.leapMaxY - this.state.leapMinY
+    );
+    const rectApp     = new Rect(
+      this.state.appMinX,
+      this.state.appMinY,
+      this.state.appMaxX - this.state.appMinX,
+      this.state.appMaxY - this.state.appMinY
+    );
+    const normRect    = this.state.showLeapZone ? rectLeap : rectApp;
+
+    const grid        = [];
+
+    this.history      = this.history.concat(this.state.hands);
+    if (this.history.length > MAX_HISTORY) {
+      this.history    = this.history.slice(-MAX_HISTORY);
+    }
+
+    this.history.forEach((hand) => {
+
+      let col   = Math.floor(normRect.normX(hand.x) * CONFIDENCE_GRID_COLS),
+          row   = Math.floor(normRect.normY(hand.y) * CONFIDENCE_GRID_ROWS),
+          index = (row * CONFIDENCE_GRID_COLS) + col;
+
+      if (!grid[index]) {
+        grid[index] = [ hand.confidence ];
+      } else {
+        grid[index].push(hand.confidence);
+      }
+
+    });
+
+    grid.forEach((history, i) => {
+      grid[i] = grid[i].reduce((sum, cur) => ( sum + cur ), 0) / (grid[i].length || 1);
+    });
+
+    this.confidenceGrid = grid;
+
+  }
+
+
 
   // React lifecycle
 
@@ -460,8 +514,6 @@ export default class App extends React.Component {
 
       <div className={appClasses}>
 
-        <div className='frame' />
-
         {(this.state.showLeapZone && hasCalibration) && (
           <div
             className='app-zone'
@@ -474,6 +526,11 @@ export default class App extends React.Component {
             <p>App window area</p>
           </div>
         )}
+
+        <ConfidenceGrid
+          colCount={CONFIDENCE_GRID_COLS}
+          rowCount={CONFIDENCE_GRID_ROWS}
+          grid={this.confidenceGrid} />
 
         {(hands.length > 0) && (
           <HandsDisplay
@@ -512,6 +569,8 @@ export default class App extends React.Component {
             winW={this.state.winW}
             winH={this.state.winH} />
         )}
+
+        <div className='frame' />
 
       </div>
 

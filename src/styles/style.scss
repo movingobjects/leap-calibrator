@@ -13,6 +13,8 @@ body {
 
 div.frame {
   position: absolute;
+  left: 0px;
+  top: 0px;
   width: 100%;
   height: 100%;
   border-width: 0px;
@@ -20,6 +22,7 @@ div.frame {
   border-style: solid;
   transition: border-width 200ms ease;
   overflow: hidden;
+  pointer-events: none;
 }
 .hands-on div.frame {
   border-width: 5px;
@@ -148,6 +151,7 @@ div.controls {
 }
 
 div.prompt {
+  pointer-events: none;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -163,6 +167,7 @@ div.prompt {
 }
 
 div.app-zone {
+  pointer-events: none;
   position: absolute;
   border: 2px dotted #345;
 
@@ -179,6 +184,7 @@ div.app-zone {
 }
 
 ul.hands {
+  pointer-events: none;
   list-style: none;
   margin: 0;
   padding: 0;
@@ -196,6 +202,7 @@ ul.hands {
 }
 
 div.calibration {
+  pointer-events: none;
 
   div.marker {
     position: absolute;
@@ -223,6 +230,26 @@ div.calibration {
       background-color: #0cc;
     }
 
+
+  }
+
+}
+
+ul.confidence-grid {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  list-style: none;
+  padding: 0px;
+  margin: 0px;
+  pointer-events: none;
+
+  li {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    border-radius: 30px;
+    transform: translate(-50%, -50%);
 
   }
 

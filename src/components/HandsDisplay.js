@@ -44,15 +44,11 @@ export default class HandsDisplay extends React.Component {
     return (
 
       <ul className='hands'>
-        {this.props.hands.map((hand, i) => (
+        {this.props.hands.map((handStyle, i) => (
           <li
             key={i}
             className='hand'
-            style={{
-              backgroundColor: hand.color,
-              left: hand.x + 'px',
-              top: hand.y + 'px'
-            }}></li>
+            style={handStyle}></li>
         ))}
       </ul>
 
