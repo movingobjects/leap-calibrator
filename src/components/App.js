@@ -11,7 +11,7 @@ import classNames from 'classnames';
 import { maths, random, Rect, Span } from 'varyd-utils';
 import LeapAgent from '../utils/LeapAgent';
 
-import ConfidenceGrid from './ConfidenceGrid';
+import Heatmap from './Heatmap';
 import ControlsPanel from './ControlsPanel';
 import HandsDisplay from './HandsDisplay';
 import Calibration from './Calibration';
@@ -24,8 +24,9 @@ const CALIBRATION_STEPS         = 4,
       CALIBRATION_MAX_MOVE_DIST = 50,
       CALIBRATION_PAD_PERC      = 0.25;
 
-const CONFIDENCE_GRID_COLS      = 30,
-      CONFIDENCE_GRID_ROWS      = 20;
+const HEATMAP_COLS = 30,
+      HEATMAP_ROWS = 20;
+
 
 // Class
 
@@ -41,7 +42,7 @@ export default class App extends React.Component {
     this.initBindings();
     this.initLeap();
     this.initFullscreen();
-    this.initConfidenceGrid()
+    this.initHeatmap()
 
   }
 
@@ -94,10 +95,10 @@ export default class App extends React.Component {
     }
 
   }
-  initConfidenceGrid() {
+  initHeatmap() {
 
     this.history  = [];
-    this.confidenceGrid = [];
+    this.heatmap = [];
 
   }
 
@@ -153,7 +154,7 @@ export default class App extends React.Component {
     }
 
     if (this.handsOn) {
-      this.updateConfidenceGrid();
+      this.updateHeatmap();
     }
 
   }
@@ -442,7 +443,7 @@ export default class App extends React.Component {
 
   }
 
-  updateConfidenceGrid() {
+  updateHeatmap() {
 
     const MAX_HISTORY = 10000;
 
@@ -460,32 +461,30 @@ export default class App extends React.Component {
     );
     const normRect    = this.state.showLeapZone ? rectLeap : rectApp;
 
-    const grid        = [];
-
+    this.heatmap      = [];
     this.history      = this.history.concat(this.state.hands);
+
     if (this.history.length > MAX_HISTORY) {
       this.history    = this.history.slice(-MAX_HISTORY);
     }
 
     this.history.forEach((hand) => {
 
-      let col   = Math.floor(normRect.normX(hand.x) * CONFIDENCE_GRID_COLS),
-          row   = Math.floor(normRect.normY(hand.y) * CONFIDENCE_GRID_ROWS),
-          index = (row * CONFIDENCE_GRID_COLS) + col;
+      let col   = Math.floor(normRect.normX(hand.x) * HEATMAP_COLS),
+          row   = Math.floor(normRect.normY(hand.y) * HEATMAP_ROWS),
+          index = (row * HEATMAP_COLS) + col;
 
-      if (!grid[index]) {
-        grid[index] = [ hand.confidence ];
+      if (!this.heatmap[index]) {
+        this.heatmap[index] = [ hand.confidence ];
       } else {
-        grid[index].push(hand.confidence);
+        this.heatmap[index].push(hand.confidence);
       }
 
     });
 
-    grid.forEach((history, i) => {
-      grid[i] = grid[i].reduce((sum, cur) => ( sum + cur ), 0) / (grid[i].length || 1);
+    this.heatmap.forEach((history, i) => {
+      this.heatmap[i] = this.heatmap[i].reduce((sum, cur) => ( sum + cur ), 0) / (this.heatmap[i].length || 1);
     });
-
-    this.confidenceGrid = grid;
 
   }
 
@@ -527,10 +526,10 @@ export default class App extends React.Component {
           </div>
         )}
 
-        <ConfidenceGrid
-          colCount={CONFIDENCE_GRID_COLS}
-          rowCount={CONFIDENCE_GRID_ROWS}
-          grid={this.confidenceGrid} />
+        <Heatmap
+          colCount={HEATMAP_COLS}
+          rowCount={HEATMAP_ROWS}
+          data={this.heatmap} />
 
         {(hands.length > 0) && (
           <HandsDisplay

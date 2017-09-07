@@ -235,7 +235,7 @@ div.calibration {
 
 }
 
-ul.confidence-grid {
+ul.heatmap {
   position: absolute;
   left: 0px;
   top: 0px;
@@ -246,9 +246,9 @@ ul.confidence-grid {
 
   li {
     position: absolute;
-    width: 30px;
-    height: 30px;
-    border-radius: 30px;
+    width: 10px;
+    height: 10px;
+    border-radius: 10px;
     transform: translate(-50%, -50%);
 
   }

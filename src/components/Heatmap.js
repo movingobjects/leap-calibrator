@@ -12,7 +12,7 @@ import { maths } from 'varyd-utils';
 
 // Class
 
-export default class ConfidenceGrid extends React.Component {
+export default class Heatmap extends React.Component {
 
   // Constructor
 
@@ -51,8 +51,8 @@ export default class ConfidenceGrid extends React.Component {
 
     return (
 
-      <ul className='confidence-grid'>
-        {this.props.grid.map((amt, i) => (
+      <ul className='heatmap'>
+        {this.props.data.map((amt, i) => (
           <li
             key={i}
             className={'amt-' + Math.round(amt * 10)}
