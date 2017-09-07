@@ -77,6 +77,17 @@ export default class ControlsPanel extends React.Component {
           <label>
             <input
               type='checkbox'
+              name='showHeatmap'
+              checked={this.props.showHeatmap}
+              onChange={this.props.onControlChange} />
+            <strong>[H]</strong> Show confidence heat map
+          </label>
+
+          <br />
+
+          <label>
+            <input
+              type='checkbox'
               name='showLeapZone'
               checked={this.props.showLeapZone}
               onChange={this.props.onControlChange} />

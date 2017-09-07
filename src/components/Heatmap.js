@@ -55,13 +55,13 @@ export default class Heatmap extends React.Component {
         {this.props.data.map((amt, i) => (
           <li
             key={i}
-            className={'amt-' + Math.round(amt * 10)}
             style={{
               left: this.getLeft(i) + 'px',
               top: this.getTop(i) + 'px',
               backgroundColor: `hsl(${maths.lerp(0, 140, amt)}, 100%, 50%)`
             }} />
         ))}
+
       </ul>
 
     );

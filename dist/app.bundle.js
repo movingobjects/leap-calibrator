@@ -5554,145 +5554,6 @@ if(typeof(exports) !== 'undefined') {
 
 /***/ }),
 /* 2 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__arrays__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__geom__ = __webpack_require__(23);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__maths__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__random__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__text__ = __webpack_require__(53);
-/* unused harmony reexport arrays */
-/* unused harmony reexport geom */
-/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_2__maths__; });
-/* unused harmony reexport random */
-/* unused harmony reexport text */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__Rect__ = __webpack_require__(51);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_5__Rect__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__Span__ = __webpack_require__(14);
-/* unused harmony reexport Span */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__Vec__ = __webpack_require__(52);
-/* unused harmony reexport Vec */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__Dispatcher__ = __webpack_require__(50);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return __WEBPACK_IMPORTED_MODULE_8__Dispatcher__["a"]; });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/***/ }),
-/* 3 */
-/***/ (function(module, exports) {
-
-module.exports = React;
-
-/***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/**
- * Leap is the global namespace of the Leap API.
- * @namespace Leap
- */
-module.exports = {
-  Controller: __webpack_require__(40),
-  Frame: __webpack_require__(12),
-  Gesture: __webpack_require__(13),
-  Hand: __webpack_require__(11),
-  Pointable: __webpack_require__(5),
-  Finger: __webpack_require__(10),
-  InteractionBox: __webpack_require__(19),
-  CircularBuffer: __webpack_require__(16),
-  UI: __webpack_require__(42),
-  JSONProtocol: __webpack_require__(20).JSONProtocol,
-  glMatrix: __webpack_require__(1),
-  mat3: __webpack_require__(1).mat3,
-  vec3: __webpack_require__(1).vec3,
-  loopController: undefined,
-  version: __webpack_require__(45),
-
-  /**
-   * Expose utility libraries for convenience
-   * Use carefully - they may be subject to upgrade or removal in different versions of LeapJS.
-   *
-   */
-  _: __webpack_require__(0),
-  EventEmitter: __webpack_require__(7).EventEmitter,
-
-  /**
-   * The Leap.loop() function passes a frame of Leap data to your
-   * callback function and then calls window.requestAnimationFrame() after
-   * executing your callback function.
-   *
-   * Leap.loop() sets up the Leap controller and WebSocket connection for you.
-   * You do not need to create your own controller when using this method.
-   *
-   * Your callback function is called on an interval determined by the client
-   * browser. Typically, this is on an interval of 60 frames/second. The most
-   * recent frame of Leap data is passed to your callback function. If the Leap
-   * is producing frames at a slower rate than the browser frame rate, the same
-   * frame of Leap data can be passed to your function in successive animation
-   * updates.
-   *
-   * As an alternative, you can create your own Controller object and use a
-   * {@link Controller#onFrame onFrame} callback to process the data at
-   * the frame rate of the Leap device. See {@link Controller} for an
-   * example.
-   *
-   * @method Leap.loop
-   * @param {function} callback A function called when the browser is ready to
-   * draw to the screen. The most recent {@link Frame} object is passed to
-   * your callback function.
-   *
-   * ```javascript
-   *    Leap.loop( function( frame ) {
-   *        // ... your code here
-   *    })
-   * ```
-   */
-  loop: function(opts, callback) {
-    if (opts && callback === undefined &&  ( ({}).toString.call(opts) === '[object Function]' ) ) {
-      callback = opts;
-      opts = {};
-    }
-
-    if (this.loopController) {
-      if (opts){
-        this.loopController.setupFrameEvents(opts);
-      }
-    }else{
-      this.loopController = new this.Controller(opts);
-    }
-
-    this.loopController.loop(callback);
-    return this.loopController;
-  },
-
-  /*
-   * Convenience method for Leap.Controller.plugin
-   */
-  plugin: function(name, options){
-    this.Controller.plugin(name, options)
-  }
-}
-
-
-/***/ }),
-/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var glMatrix = __webpack_require__(1)
@@ -5913,7 +5774,454 @@ Pointable.Invalid = { valid: false };
 
 
 /***/ }),
+/* 3 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__arrays__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__geom__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__maths__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__random__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__text__ = __webpack_require__(52);
+/* unused harmony reexport arrays */
+/* unused harmony reexport geom */
+/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "c", function() { return __WEBPACK_IMPORTED_MODULE_2__maths__; });
+/* unused harmony reexport random */
+/* unused harmony reexport text */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__Rect__ = __webpack_require__(50);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_5__Rect__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__Span__ = __webpack_require__(14);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_6__Span__["default"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__Vec__ = __webpack_require__(51);
+/* unused harmony reexport Vec */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__Dispatcher__ = __webpack_require__(49);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return __WEBPACK_IMPORTED_MODULE_8__Dispatcher__["a"]; });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports) {
+
+module.exports = React;
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports) {
+
+// Copyright Joyent, Inc. and other Node contributors.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a
+// copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to permit
+// persons to whom the Software is furnished to do so, subject to the
+// following conditions:
+//
+// The above copyright notice and this permission notice shall be included
+// in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+// USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+function EventEmitter() {
+  this._events = this._events || {};
+  this._maxListeners = this._maxListeners || undefined;
+}
+module.exports = EventEmitter;
+
+// Backwards-compat with node 0.10.x
+EventEmitter.EventEmitter = EventEmitter;
+
+EventEmitter.prototype._events = undefined;
+EventEmitter.prototype._maxListeners = undefined;
+
+// By default EventEmitters will print a warning if more than 10 listeners are
+// added to it. This is a useful default which helps finding memory leaks.
+EventEmitter.defaultMaxListeners = 10;
+
+// Obviously not all Emitters should be limited to 10. This function allows
+// that to be increased. Set to zero for unlimited.
+EventEmitter.prototype.setMaxListeners = function(n) {
+  if (!isNumber(n) || n < 0 || isNaN(n))
+    throw TypeError('n must be a positive number');
+  this._maxListeners = n;
+  return this;
+};
+
+EventEmitter.prototype.emit = function(type) {
+  var er, handler, len, args, i, listeners;
+
+  if (!this._events)
+    this._events = {};
+
+  // If there is no 'error' event listener then throw.
+  if (type === 'error') {
+    if (!this._events.error ||
+        (isObject(this._events.error) && !this._events.error.length)) {
+      er = arguments[1];
+      if (er instanceof Error) {
+        throw er; // Unhandled 'error' event
+      } else {
+        // At least give some kind of context to the user
+        var err = new Error('Uncaught, unspecified "error" event. (' + er + ')');
+        err.context = er;
+        throw err;
+      }
+    }
+  }
+
+  handler = this._events[type];
+
+  if (isUndefined(handler))
+    return false;
+
+  if (isFunction(handler)) {
+    switch (arguments.length) {
+      // fast cases
+      case 1:
+        handler.call(this);
+        break;
+      case 2:
+        handler.call(this, arguments[1]);
+        break;
+      case 3:
+        handler.call(this, arguments[1], arguments[2]);
+        break;
+      // slower
+      default:
+        args = Array.prototype.slice.call(arguments, 1);
+        handler.apply(this, args);
+    }
+  } else if (isObject(handler)) {
+    args = Array.prototype.slice.call(arguments, 1);
+    listeners = handler.slice();
+    len = listeners.length;
+    for (i = 0; i < len; i++)
+      listeners[i].apply(this, args);
+  }
+
+  return true;
+};
+
+EventEmitter.prototype.addListener = function(type, listener) {
+  var m;
+
+  if (!isFunction(listener))
+    throw TypeError('listener must be a function');
+
+  if (!this._events)
+    this._events = {};
+
+  // To avoid recursion in the case that type === "newListener"! Before
+  // adding it to the listeners, first emit "newListener".
+  if (this._events.newListener)
+    this.emit('newListener', type,
+              isFunction(listener.listener) ?
+              listener.listener : listener);
+
+  if (!this._events[type])
+    // Optimize the case of one listener. Don't need the extra array object.
+    this._events[type] = listener;
+  else if (isObject(this._events[type]))
+    // If we've already got an array, just append.
+    this._events[type].push(listener);
+  else
+    // Adding the second element, need to change to array.
+    this._events[type] = [this._events[type], listener];
+
+  // Check for listener leak
+  if (isObject(this._events[type]) && !this._events[type].warned) {
+    if (!isUndefined(this._maxListeners)) {
+      m = this._maxListeners;
+    } else {
+      m = EventEmitter.defaultMaxListeners;
+    }
+
+    if (m && m > 0 && this._events[type].length > m) {
+      this._events[type].warned = true;
+      console.error('(node) warning: possible EventEmitter memory ' +
+                    'leak detected. %d listeners added. ' +
+                    'Use emitter.setMaxListeners() to increase limit.',
+                    this._events[type].length);
+      if (typeof console.trace === 'function') {
+        // not supported in IE 10
+        console.trace();
+      }
+    }
+  }
+
+  return this;
+};
+
+EventEmitter.prototype.on = EventEmitter.prototype.addListener;
+
+EventEmitter.prototype.once = function(type, listener) {
+  if (!isFunction(listener))
+    throw TypeError('listener must be a function');
+
+  var fired = false;
+
+  function g() {
+    this.removeListener(type, g);
+
+    if (!fired) {
+      fired = true;
+      listener.apply(this, arguments);
+    }
+  }
+
+  g.listener = listener;
+  this.on(type, g);
+
+  return this;
+};
+
+// emits a 'removeListener' event iff the listener was removed
+EventEmitter.prototype.removeListener = function(type, listener) {
+  var list, position, length, i;
+
+  if (!isFunction(listener))
+    throw TypeError('listener must be a function');
+
+  if (!this._events || !this._events[type])
+    return this;
+
+  list = this._events[type];
+  length = list.length;
+  position = -1;
+
+  if (list === listener ||
+      (isFunction(list.listener) && list.listener === listener)) {
+    delete this._events[type];
+    if (this._events.removeListener)
+      this.emit('removeListener', type, listener);
+
+  } else if (isObject(list)) {
+    for (i = length; i-- > 0;) {
+      if (list[i] === listener ||
+          (list[i].listener && list[i].listener === listener)) {
+        position = i;
+        break;
+      }
+    }
+
+    if (position < 0)
+      return this;
+
+    if (list.length === 1) {
+      list.length = 0;
+      delete this._events[type];
+    } else {
+      list.splice(position, 1);
+    }
+
+    if (this._events.removeListener)
+      this.emit('removeListener', type, listener);
+  }
+
+  return this;
+};
+
+EventEmitter.prototype.removeAllListeners = function(type) {
+  var key, listeners;
+
+  if (!this._events)
+    return this;
+
+  // not listening for removeListener, no need to emit
+  if (!this._events.removeListener) {
+    if (arguments.length === 0)
+      this._events = {};
+    else if (this._events[type])
+      delete this._events[type];
+    return this;
+  }
+
+  // emit removeListener for all listeners on all events
+  if (arguments.length === 0) {
+    for (key in this._events) {
+      if (key === 'removeListener') continue;
+      this.removeAllListeners(key);
+    }
+    this.removeAllListeners('removeListener');
+    this._events = {};
+    return this;
+  }
+
+  listeners = this._events[type];
+
+  if (isFunction(listeners)) {
+    this.removeListener(type, listeners);
+  } else if (listeners) {
+    // LIFO order
+    while (listeners.length)
+      this.removeListener(type, listeners[listeners.length - 1]);
+  }
+  delete this._events[type];
+
+  return this;
+};
+
+EventEmitter.prototype.listeners = function(type) {
+  var ret;
+  if (!this._events || !this._events[type])
+    ret = [];
+  else if (isFunction(this._events[type]))
+    ret = [this._events[type]];
+  else
+    ret = this._events[type].slice();
+  return ret;
+};
+
+EventEmitter.prototype.listenerCount = function(type) {
+  if (this._events) {
+    var evlistener = this._events[type];
+
+    if (isFunction(evlistener))
+      return 1;
+    else if (evlistener)
+      return evlistener.length;
+  }
+  return 0;
+};
+
+EventEmitter.listenerCount = function(emitter, type) {
+  return emitter.listenerCount(type);
+};
+
+function isFunction(arg) {
+  return typeof arg === 'function';
+}
+
+function isNumber(arg) {
+  return typeof arg === 'number';
+}
+
+function isObject(arg) {
+  return typeof arg === 'object' && arg !== null;
+}
+
+function isUndefined(arg) {
+  return arg === void 0;
+}
+
+
+/***/ }),
 /* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/**
+ * Leap is the global namespace of the Leap API.
+ * @namespace Leap
+ */
+module.exports = {
+  Controller: __webpack_require__(39),
+  Frame: __webpack_require__(12),
+  Gesture: __webpack_require__(13),
+  Hand: __webpack_require__(11),
+  Pointable: __webpack_require__(2),
+  Finger: __webpack_require__(10),
+  InteractionBox: __webpack_require__(20),
+  CircularBuffer: __webpack_require__(17),
+  UI: __webpack_require__(41),
+  JSONProtocol: __webpack_require__(21).JSONProtocol,
+  glMatrix: __webpack_require__(1),
+  mat3: __webpack_require__(1).mat3,
+  vec3: __webpack_require__(1).vec3,
+  loopController: undefined,
+  version: __webpack_require__(44),
+
+  /**
+   * Expose utility libraries for convenience
+   * Use carefully - they may be subject to upgrade or removal in different versions of LeapJS.
+   *
+   */
+  _: __webpack_require__(0),
+  EventEmitter: __webpack_require__(5).EventEmitter,
+
+  /**
+   * The Leap.loop() function passes a frame of Leap data to your
+   * callback function and then calls window.requestAnimationFrame() after
+   * executing your callback function.
+   *
+   * Leap.loop() sets up the Leap controller and WebSocket connection for you.
+   * You do not need to create your own controller when using this method.
+   *
+   * Your callback function is called on an interval determined by the client
+   * browser. Typically, this is on an interval of 60 frames/second. The most
+   * recent frame of Leap data is passed to your callback function. If the Leap
+   * is producing frames at a slower rate than the browser frame rate, the same
+   * frame of Leap data can be passed to your function in successive animation
+   * updates.
+   *
+   * As an alternative, you can create your own Controller object and use a
+   * {@link Controller#onFrame onFrame} callback to process the data at
+   * the frame rate of the Leap device. See {@link Controller} for an
+   * example.
+   *
+   * @method Leap.loop
+   * @param {function} callback A function called when the browser is ready to
+   * draw to the screen. The most recent {@link Frame} object is passed to
+   * your callback function.
+   *
+   * ```javascript
+   *    Leap.loop( function( frame ) {
+   *        // ... your code here
+   *    })
+   * ```
+   */
+  loop: function(opts, callback) {
+    if (opts && callback === undefined &&  ( ({}).toString.call(opts) === '[object Function]' ) ) {
+      callback = opts;
+      opts = {};
+    }
+
+    if (this.loopController) {
+      if (opts){
+        this.loopController.setupFrameEvents(opts);
+      }
+    }else{
+      this.loopController = new this.Controller(opts);
+    }
+
+    this.loopController.loop(callback);
+    return this.loopController;
+  },
+
+  /*
+   * Convenience method for Leap.Controller.plugin
+   */
+  plugin: function(name, options){
+    this.Controller.plugin(name, options)
+  }
+}
+
+
+/***/ }),
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, module) {var __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -23002,315 +23310,7 @@ Pointable.Invalid = { valid: false };
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(24), __webpack_require__(54)(module)))
-
-/***/ }),
-/* 7 */
-/***/ (function(module, exports) {
-
-// Copyright Joyent, Inc. and other Node contributors.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a
-// copy of this software and associated documentation files (the
-// "Software"), to deal in the Software without restriction, including
-// without limitation the rights to use, copy, modify, merge, publish,
-// distribute, sublicense, and/or sell copies of the Software, and to permit
-// persons to whom the Software is furnished to do so, subject to the
-// following conditions:
-//
-// The above copyright notice and this permission notice shall be included
-// in all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
-// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
-// USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-function EventEmitter() {
-  this._events = this._events || {};
-  this._maxListeners = this._maxListeners || undefined;
-}
-module.exports = EventEmitter;
-
-// Backwards-compat with node 0.10.x
-EventEmitter.EventEmitter = EventEmitter;
-
-EventEmitter.prototype._events = undefined;
-EventEmitter.prototype._maxListeners = undefined;
-
-// By default EventEmitters will print a warning if more than 10 listeners are
-// added to it. This is a useful default which helps finding memory leaks.
-EventEmitter.defaultMaxListeners = 10;
-
-// Obviously not all Emitters should be limited to 10. This function allows
-// that to be increased. Set to zero for unlimited.
-EventEmitter.prototype.setMaxListeners = function(n) {
-  if (!isNumber(n) || n < 0 || isNaN(n))
-    throw TypeError('n must be a positive number');
-  this._maxListeners = n;
-  return this;
-};
-
-EventEmitter.prototype.emit = function(type) {
-  var er, handler, len, args, i, listeners;
-
-  if (!this._events)
-    this._events = {};
-
-  // If there is no 'error' event listener then throw.
-  if (type === 'error') {
-    if (!this._events.error ||
-        (isObject(this._events.error) && !this._events.error.length)) {
-      er = arguments[1];
-      if (er instanceof Error) {
-        throw er; // Unhandled 'error' event
-      } else {
-        // At least give some kind of context to the user
-        var err = new Error('Uncaught, unspecified "error" event. (' + er + ')');
-        err.context = er;
-        throw err;
-      }
-    }
-  }
-
-  handler = this._events[type];
-
-  if (isUndefined(handler))
-    return false;
-
-  if (isFunction(handler)) {
-    switch (arguments.length) {
-      // fast cases
-      case 1:
-        handler.call(this);
-        break;
-      case 2:
-        handler.call(this, arguments[1]);
-        break;
-      case 3:
-        handler.call(this, arguments[1], arguments[2]);
-        break;
-      // slower
-      default:
-        args = Array.prototype.slice.call(arguments, 1);
-        handler.apply(this, args);
-    }
-  } else if (isObject(handler)) {
-    args = Array.prototype.slice.call(arguments, 1);
-    listeners = handler.slice();
-    len = listeners.length;
-    for (i = 0; i < len; i++)
-      listeners[i].apply(this, args);
-  }
-
-  return true;
-};
-
-EventEmitter.prototype.addListener = function(type, listener) {
-  var m;
-
-  if (!isFunction(listener))
-    throw TypeError('listener must be a function');
-
-  if (!this._events)
-    this._events = {};
-
-  // To avoid recursion in the case that type === "newListener"! Before
-  // adding it to the listeners, first emit "newListener".
-  if (this._events.newListener)
-    this.emit('newListener', type,
-              isFunction(listener.listener) ?
-              listener.listener : listener);
-
-  if (!this._events[type])
-    // Optimize the case of one listener. Don't need the extra array object.
-    this._events[type] = listener;
-  else if (isObject(this._events[type]))
-    // If we've already got an array, just append.
-    this._events[type].push(listener);
-  else
-    // Adding the second element, need to change to array.
-    this._events[type] = [this._events[type], listener];
-
-  // Check for listener leak
-  if (isObject(this._events[type]) && !this._events[type].warned) {
-    if (!isUndefined(this._maxListeners)) {
-      m = this._maxListeners;
-    } else {
-      m = EventEmitter.defaultMaxListeners;
-    }
-
-    if (m && m > 0 && this._events[type].length > m) {
-      this._events[type].warned = true;
-      console.error('(node) warning: possible EventEmitter memory ' +
-                    'leak detected. %d listeners added. ' +
-                    'Use emitter.setMaxListeners() to increase limit.',
-                    this._events[type].length);
-      if (typeof console.trace === 'function') {
-        // not supported in IE 10
-        console.trace();
-      }
-    }
-  }
-
-  return this;
-};
-
-EventEmitter.prototype.on = EventEmitter.prototype.addListener;
-
-EventEmitter.prototype.once = function(type, listener) {
-  if (!isFunction(listener))
-    throw TypeError('listener must be a function');
-
-  var fired = false;
-
-  function g() {
-    this.removeListener(type, g);
-
-    if (!fired) {
-      fired = true;
-      listener.apply(this, arguments);
-    }
-  }
-
-  g.listener = listener;
-  this.on(type, g);
-
-  return this;
-};
-
-// emits a 'removeListener' event iff the listener was removed
-EventEmitter.prototype.removeListener = function(type, listener) {
-  var list, position, length, i;
-
-  if (!isFunction(listener))
-    throw TypeError('listener must be a function');
-
-  if (!this._events || !this._events[type])
-    return this;
-
-  list = this._events[type];
-  length = list.length;
-  position = -1;
-
-  if (list === listener ||
-      (isFunction(list.listener) && list.listener === listener)) {
-    delete this._events[type];
-    if (this._events.removeListener)
-      this.emit('removeListener', type, listener);
-
-  } else if (isObject(list)) {
-    for (i = length; i-- > 0;) {
-      if (list[i] === listener ||
-          (list[i].listener && list[i].listener === listener)) {
-        position = i;
-        break;
-      }
-    }
-
-    if (position < 0)
-      return this;
-
-    if (list.length === 1) {
-      list.length = 0;
-      delete this._events[type];
-    } else {
-      list.splice(position, 1);
-    }
-
-    if (this._events.removeListener)
-      this.emit('removeListener', type, listener);
-  }
-
-  return this;
-};
-
-EventEmitter.prototype.removeAllListeners = function(type) {
-  var key, listeners;
-
-  if (!this._events)
-    return this;
-
-  // not listening for removeListener, no need to emit
-  if (!this._events.removeListener) {
-    if (arguments.length === 0)
-      this._events = {};
-    else if (this._events[type])
-      delete this._events[type];
-    return this;
-  }
-
-  // emit removeListener for all listeners on all events
-  if (arguments.length === 0) {
-    for (key in this._events) {
-      if (key === 'removeListener') continue;
-      this.removeAllListeners(key);
-    }
-    this.removeAllListeners('removeListener');
-    this._events = {};
-    return this;
-  }
-
-  listeners = this._events[type];
-
-  if (isFunction(listeners)) {
-    this.removeListener(type, listeners);
-  } else if (listeners) {
-    // LIFO order
-    while (listeners.length)
-      this.removeListener(type, listeners[listeners.length - 1]);
-  }
-  delete this._events[type];
-
-  return this;
-};
-
-EventEmitter.prototype.listeners = function(type) {
-  var ret;
-  if (!this._events || !this._events[type])
-    ret = [];
-  else if (isFunction(this._events[type]))
-    ret = [this._events[type]];
-  else
-    ret = this._events[type].slice();
-  return ret;
-};
-
-EventEmitter.prototype.listenerCount = function(type) {
-  if (this._events) {
-    var evlistener = this._events[type];
-
-    if (isFunction(evlistener))
-      return 1;
-    else if (evlistener)
-      return evlistener.length;
-  }
-  return 0;
-};
-
-EventEmitter.listenerCount = function(emitter, type) {
-  return emitter.listenerCount(type);
-};
-
-function isFunction(arg) {
-  return typeof arg === 'function';
-}
-
-function isNumber(arg) {
-  return typeof arg === 'number';
-}
-
-function isObject(arg) {
-  return typeof arg === 'object' && arg !== null;
-}
-
-function isUndefined(arg) {
-  return arg === void 0;
-}
-
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(25), __webpack_require__(53)(module)))
 
 /***/ }),
 /* 8 */
@@ -23550,9 +23550,9 @@ function divisibleBy(val, divisor) {
 /* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Pointable = __webpack_require__(5),
-  Bone = __webpack_require__(15)
-  , Dialog = __webpack_require__(18)
+var Pointable = __webpack_require__(2),
+  Bone = __webpack_require__(16)
+  , Dialog = __webpack_require__(19)
   , _ = __webpack_require__(0);
 
 /**
@@ -23745,8 +23745,8 @@ Finger.Invalid = { valid: false };
 /* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Pointable = __webpack_require__(5)
-  , Bone = __webpack_require__(15)
+var Pointable = __webpack_require__(2)
+  , Bone = __webpack_require__(16)
   , glMatrix = __webpack_require__(1)
   , mat3 = glMatrix.mat3
   , vec3 = glMatrix.vec3
@@ -24204,12 +24204,12 @@ Hand.Invalid = {
 /***/ (function(module, exports, __webpack_require__) {
 
 var Hand = __webpack_require__(11)
-  , Pointable = __webpack_require__(5)
+  , Pointable = __webpack_require__(2)
   , createGesture = __webpack_require__(13).createGesture
   , glMatrix = __webpack_require__(1)
   , mat3 = glMatrix.mat3
   , vec3 = glMatrix.vec3
-  , InteractionBox = __webpack_require__(19)
+  , InteractionBox = __webpack_require__(20)
   , Finger = __webpack_require__(10)
   , _ = __webpack_require__(0);
 
@@ -24714,7 +24714,7 @@ Frame.Invalid = {
 
 var glMatrix = __webpack_require__(1)
   , vec3 = glMatrix.vec3
-  , EventEmitter = __webpack_require__(7).EventEmitter
+  , EventEmitter = __webpack_require__(5).EventEmitter
   , _ = __webpack_require__(0);
 
 /**
@@ -25324,7 +25324,62 @@ class Span {
 /* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Pointable = __webpack_require__(5),
+var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+  Copyright (c) 2016 Jed Watson.
+  Licensed under the MIT License (MIT), see
+  http://jedwatson.github.io/classnames
+*/
+/* global define */
+
+(function () {
+	'use strict';
+
+	var hasOwn = {}.hasOwnProperty;
+
+	function classNames () {
+		var classes = [];
+
+		for (var i = 0; i < arguments.length; i++) {
+			var arg = arguments[i];
+			if (!arg) continue;
+
+			var argType = typeof arg;
+
+			if (argType === 'string' || argType === 'number') {
+				classes.push(arg);
+			} else if (Array.isArray(arg)) {
+				classes.push(classNames.apply(null, arg));
+			} else if (argType === 'object') {
+				for (var key in arg) {
+					if (hasOwn.call(arg, key) && arg[key]) {
+						classes.push(key);
+					}
+				}
+			}
+		}
+
+		return classes.join(' ');
+	}
+
+	if (typeof module !== 'undefined' && module.exports) {
+		module.exports = classNames;
+	} else if (true) {
+		// register as 'classnames', consistent with npm package name
+		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function () {
+			return classNames;
+		}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	} else {
+		window.classNames = classNames;
+	}
+}());
+
+
+/***/ }),
+/* 16 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Pointable = __webpack_require__(2),
   glMatrix = __webpack_require__(1)
   , vec3 = glMatrix.vec3
   , mat3 = glMatrix.mat3
@@ -25490,7 +25545,7 @@ Bone.prototype.direction = function(){
 
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports) {
 
 var CircularBuffer = module.exports = function(size) {
@@ -25513,11 +25568,11 @@ CircularBuffer.prototype.push = function(o) {
 
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var chooseProtocol = __webpack_require__(20).chooseProtocol
-  , EventEmitter = __webpack_require__(7).EventEmitter
+var chooseProtocol = __webpack_require__(21).chooseProtocol
+  , EventEmitter = __webpack_require__(5).EventEmitter
   , _ = __webpack_require__(0);
 
 var BaseConnection = module.exports = function(opts) {
@@ -25685,7 +25740,7 @@ BaseConnection.prototype.reportFocus = function(state) {
 _.extend(BaseConnection.prototype, EventEmitter.prototype);
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(process) {var Dialog = module.exports = function(message, options){
@@ -25834,10 +25889,10 @@ Dialog.warnBones = function(){
   }
 
 }
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(21)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(22)))
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var glMatrix = __webpack_require__(1)
@@ -25983,15 +26038,15 @@ InteractionBox.Invalid = { valid: false };
 
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Frame = __webpack_require__(12)
   , Hand = __webpack_require__(11)
-  , Pointable = __webpack_require__(5)
+  , Pointable = __webpack_require__(2)
   , Finger = __webpack_require__(10)
   , _ = __webpack_require__(0)
-  , EventEmitter = __webpack_require__(7).EventEmitter;
+  , EventEmitter = __webpack_require__(5).EventEmitter;
 
 var Event = function(data) {
   this.type = data.type;
@@ -26063,7 +26118,7 @@ var JSONProtocol = exports.JSONProtocol = function(header) {
 
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -26253,7 +26308,7 @@ process.umask = function() { return 0; };
 
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -26365,7 +26420,7 @@ function getIndexSpan(a) {
 
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -26547,7 +26602,7 @@ function getFitRect(w, h, area) {
 
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, exports) {
 
 var g;
@@ -26574,24 +26629,25 @@ module.exports = g;
 
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_lodash__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_leapjs__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_leapjs__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_leapjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_leapjs__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_screenfull__ = __webpack_require__(47);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_screenfull__ = __webpack_require__(46);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_screenfull___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_screenfull__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_varyd_utils__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__utils_LeapAgent__ = __webpack_require__(34);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__ControlsPanel__ = __webpack_require__(30);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__HandsDisplay__ = __webpack_require__(31);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__AppArea__ = __webpack_require__(28);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__Prompts__ = __webpack_require__(32);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_classnames__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_classnames___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_classnames__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_varyd_utils__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__utils_LeapAgent__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__Heatmap__ = __webpack_require__(32);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__ControlsPanel__ = __webpack_require__(30);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__HandsDisplay__ = __webpack_require__(31);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__Calibration__ = __webpack_require__(29);
 
 // Imports
@@ -26613,19 +26669,13 @@ module.exports = g;
 
 // Constants
 
-const DEF_APP_MIN_X = -300,
-      DEF_APP_MIN_Y = 430,
-      DEF_APP_MAX_X = 250,
-      DEF_APP_MAX_Y = 135;
-
-const MODE_INIT = 'MODE_INIT',
-      MODE_CALIBRATING = 'MODE_CALIBRATING',
-      MODE_CALIBRATION_COMPLETE = 'MODE_CALIBRATION_COMPLETE';
-
 const CALIBRATION_STEPS = 4,
       CALIBRATION_HOLD_DURATION = 1,
       CALIBRATION_MAX_MOVE_DIST = 50,
       CALIBRATION_PAD_PERC = 0.25;
+
+const HEATMAP_COLS = 24,
+      HEATMAP_ROWS = 16;
 
 // Class
 
@@ -26641,30 +26691,31 @@ class App extends __WEBPACK_IMPORTED_MODULE_1_react__["Component"] {
     this.initBindings();
     this.initLeap();
     this.initFullscreen();
+    this.initHeatmap();
   }
 
   initState() {
 
     this.state = {
       hands: [],
-      mode: MODE_INIT,
       fullscreen: false,
+      appMinX: undefined,
+      appMinY: undefined,
+      appMaxX: undefined,
+      appMaxY: undefined,
+      showHeatmap: false,
       showLeapZone: false,
-      invertX: false,
-      invertY: true,
-      appMinX: DEF_APP_MIN_X,
-      appMinY: DEF_APP_MIN_Y,
-      appMaxX: DEF_APP_MAX_X,
-      appMaxY: DEF_APP_MAX_Y,
       leapMinX: 0,
       leapMinY: 0,
       leapMaxX: 1,
       leapMaxY: 1,
+      isCalibrating: false,
       calibrationStep: -1,
       calibrationReady: false,
       calibrationRegistering: false,
       winW: window.innerWidth,
-      winH: window.innerHeight
+      winH: window.innerHeight,
+      promptMsg: ''
     };
   }
   initBindings() {
@@ -26673,12 +26724,12 @@ class App extends __WEBPACK_IMPORTED_MODULE_1_react__["Component"] {
     this.handleWindowResize = this.handleWindowResize.bind(this);
     this.handleControlChange = this.handleControlChange.bind(this);
     this.handleFullScreenCheckboxChange = this.handleFullScreenCheckboxChange.bind(this);
-    this.handleInvertAxisChange = this.handleInvertAxisChange.bind(this);
-    this.handlePromptBtnClick = this.handlePromptBtnClick.bind(this);
+    this.handleRecalibrateClick = this.handleRecalibrateClick.bind(this);
   }
   initLeap() {
 
-    this.leap = new __WEBPACK_IMPORTED_MODULE_5__utils_LeapAgent__["a" /* default */]();
+    this.leap = new __WEBPACK_IMPORTED_MODULE_6__utils_LeapAgent__["a" /* default */]();
+
     this.leap.addListener('leapFrame', this.handleLeapFrame.bind(this));
     this.leap.addListener('zoneUpdate', this.handleLeapZoneUpdate.bind(this));
   }
@@ -26690,10 +26741,17 @@ class App extends __WEBPACK_IMPORTED_MODULE_1_react__["Component"] {
       });
     }
   }
-  initCalibration() {}
+  initHeatmap() {
+
+    this.history = [];
+    this.heatmap = [];
+  }
 
   // Getters & setters
 
+  get handsOn() {
+    return this.state.hands !== undefined && this.state.hands.length > 0;
+  }
 
   // Event handlers
 
@@ -26702,12 +26760,21 @@ class App extends __WEBPACK_IMPORTED_MODULE_1_react__["Component"] {
     switch (e.key) {
 
       case 'f':
+        e.preventDefault();
         this.setState({
           fullscreen: !this.state.fullscreen
         });
         break;
 
+      case 'h':
+        e.preventDefault();
+        this.setState({
+          showHeatmap: !this.state.showHeatmap
+        });
+        break;
+
       case 'l':
+        e.preventDefault();
         this.setState({
           showLeapZone: !this.state.showLeapZone
         });
@@ -26722,19 +26789,21 @@ class App extends __WEBPACK_IMPORTED_MODULE_1_react__["Component"] {
       winW: window.innerWidth,
       winH: window.innerHeight
     });
-
-    console.log(this.state.winW);
   }
 
   handleLeapFrame(e) {
 
-    if (this.state.mode == MODE_CALIBRATING) {
-      this.updateCalibration(e.hands);
-    }
-
     this.setState({
       hands: e.hands
     });
+
+    if (this.state.isCalibrating) {
+      this.updateCalibration();
+    }
+
+    if (this.handsOn) {
+      this.updateHeatmap();
+    }
   }
   handleLeapZoneUpdate(e) {
 
@@ -26763,45 +26832,10 @@ class App extends __WEBPACK_IMPORTED_MODULE_1_react__["Component"] {
       fullscreen: e.target.checked
     });
   }
-  handleInvertAxisChange(e) {
 
-    switch (e.target.name) {
+  handleRecalibrateClick(e) {
 
-      case 'invertX':
-        this.setState({
-          invertX: !this.state.invertX,
-          appMinX: this.state.appMaxX,
-          appMaxX: this.state.appMinX
-        });
-        break;
-
-      case 'invertY':
-        this.setState({
-          invertY: !this.state.invertY,
-          appMinY: this.state.appMaxY,
-          appMaxY: this.state.appMinY
-        });
-        break;
-
-    }
-  }
-
-  handlePromptBtnClick(e) {
-
-    switch (this.state.mode) {
-
-      case MODE_INIT:
-      case MODE_CALIBRATING:
-        this.restartCalibration();
-        break;
-
-      case MODE_CALIBRATION_COMPLETE:
-        this.setState({
-          mode: MODE_INIT
-        });
-        break;
-
-    }
+    this.restartCalibration();
   }
 
   handleCalibrationTimeout() {
@@ -26823,107 +26857,72 @@ class App extends __WEBPACK_IMPORTED_MODULE_1_react__["Component"] {
 
   getAppAreaRect() {
 
-    const showLeapZone = this.state.showLeapZone,
-          winW = this.state.winW,
-          winH = this.state.winH;
+    const spanLeapX = new __WEBPACK_IMPORTED_MODULE_5_varyd_utils__["a" /* Span */](this.state.leapMinX, this.state.leapMaxX),
+          spanLeapY = new __WEBPACK_IMPORTED_MODULE_5_varyd_utils__["a" /* Span */](this.state.leapMinY, this.state.leapMaxY),
+          winSpanX = new __WEBPACK_IMPORTED_MODULE_5_varyd_utils__["a" /* Span */](0, this.state.winW),
+          winSpanY = new __WEBPACK_IMPORTED_MODULE_5_varyd_utils__["a" /* Span */](0, this.state.winH);
 
-    const x = Math.round(showLeapZone ? __WEBPACK_IMPORTED_MODULE_4_varyd_utils__["a" /* maths */].map(this.state.appMinX, this.state.leapMinX, this.state.leapMaxX, 0, winW) : 0),
-          y = Math.round(showLeapZone ? __WEBPACK_IMPORTED_MODULE_4_varyd_utils__["a" /* maths */].map(this.state.appMinY, this.state.leapMinY, this.state.leapMaxY, 0, winH) : 0),
-          r = Math.round(showLeapZone ? __WEBPACK_IMPORTED_MODULE_4_varyd_utils__["a" /* maths */].map(this.state.appMaxX, this.state.leapMinX, this.state.leapMaxX, 0, winW) : winW),
-          b = Math.round(showLeapZone ? __WEBPACK_IMPORTED_MODULE_4_varyd_utils__["a" /* maths */].map(this.state.appMaxY, this.state.leapMinY, this.state.leapMaxY, 0, winH) : winH);
+    const x = spanLeapX.mapToSpan(this.state.appMinX, winSpanX),
+          y = spanLeapY.mapToSpan(this.state.appMinY, winSpanY),
+          r = spanLeapX.mapToSpan(this.state.appMaxX, winSpanX),
+          b = spanLeapY.mapToSpan(this.state.appMaxY, winSpanY),
+          w = r - x,
+          h = b - y;
 
-    return new __WEBPACK_IMPORTED_MODULE_4_varyd_utils__["b" /* Rect */](x, y, r - x, b - y);
+    return new __WEBPACK_IMPORTED_MODULE_5_varyd_utils__["b" /* Rect */](x, y, w, h).absolutized();
   }
   getHandsViewData() {
 
-    const showLeapZone = this.state.showLeapZone;
+    const rectLeap = new __WEBPACK_IMPORTED_MODULE_5_varyd_utils__["b" /* Rect */](this.state.leapMinX, this.state.leapMinY, this.state.leapMaxX - this.state.leapMinX, this.state.leapMaxY - this.state.leapMinY);
 
-    const rectLeap = new __WEBPACK_IMPORTED_MODULE_4_varyd_utils__["b" /* Rect */](this.state.leapMinX, this.state.leapMinY, this.state.leapMaxX - this.state.leapMinX, this.state.leapMaxY - this.state.leapMinY);
-    const rectApp = new __WEBPACK_IMPORTED_MODULE_4_varyd_utils__["b" /* Rect */](this.state.appMinX, this.state.appMinY, this.state.appMaxX - this.state.appMinX, this.state.appMaxY - this.state.appMinY);
-    const rectWin = new __WEBPACK_IMPORTED_MODULE_4_varyd_utils__["b" /* Rect */](0, 0, this.state.winW, this.state.winH);
+    const rectApp = new __WEBPACK_IMPORTED_MODULE_5_varyd_utils__["b" /* Rect */](this.state.appMinX, this.state.appMinY, this.state.appMaxX - this.state.appMinX, this.state.appMaxY - this.state.appMinY);
+
+    const normRect = this.state.showLeapZone ? rectLeap : rectApp;
+
+    const rectWin = new __WEBPACK_IMPORTED_MODULE_5_varyd_utils__["b" /* Rect */](0, 0, this.state.winW, this.state.winH);
 
     let hands = [];
 
-    for (let i = 0; i < this.state.hands.length; i++) {
+    this.state.hands.forEach((hand, i) => {
 
-      let hand = this.state.hands[i];
-
-      if (!hand) continue;
-
-      let hue = __WEBPACK_IMPORTED_MODULE_4_varyd_utils__["a" /* maths */].lerp(0, 120, hand.confidence),
-          hx,
-          hy;
-
-      if (showLeapZone) {
-        hx = rectWin.lerpX(rectLeap.normX(hand.x));
-        hy = rectWin.lerpY(rectLeap.normY(hand.y));
-      } else {
-        hx = rectWin.lerpX(rectApp.normX(hand.x));
-        hy = rectWin.lerpY(rectApp.normY(hand.y));
-      }
+      let hue = __WEBPACK_IMPORTED_MODULE_5_varyd_utils__["c" /* maths */].lerp(0, 120, hand.confidence),
+          hx = rectWin.lerpX(normRect.normX(hand.x)),
+          hy = rectWin.lerpY(normRect.normY(hand.y));
 
       let anyBadVals = isNaN(hue) || isNaN(hx) || isNaN(hy);
 
       if (!anyBadVals) {
         hands.push({
-          color: `hsl(${hue}, 100%, 50%)`,
-          x: Math.round(hx),
-          y: Math.round(hy)
+          backgroundColor: `hsl(${hue}, 100%, 50%)`,
+          left: Math.round(hx) + 'px',
+          top: Math.round(hy) + 'px'
         });
       }
-    }
+    });
 
     return hands;
   }
 
-  getPrompts() {
+  getPrompt() {
 
-    let msg = '',
-        btnLabel = '';
+    if (this.state.isCalibrating) {
 
-    switch (this.state.mode) {
-
-      case MODE_INIT:
-        msg = 'Leap Sensor Calibration';
-        btnLabel = 'Start Calibration';
-        break;
-
-      case MODE_CALIBRATING:
-
-        if (this.state.calibrationReady) {
-          msg = `Point at location #${this.state.calibrationStep + 1}`;
-        } else {
-          msg = 'Move hand away from sensor';
-        }
-
-        if (this.state.calibrationStep != 0) {
-          btnLabel = 'Restart';
-        }
-
-        break;
-
-      case MODE_CALIBRATION_COMPLETE:
-        msg = 'Calibration Complete';
-        btnLabel = 'Cool';
-        break;
-
+      if (this.state.calibrationReady) {
+        return `Point at location #${this.state.calibrationStep + 1}`;
+      } else {
+        return 'Move hand away from sensor';
+      }
     }
-
-    return __WEBPACK_IMPORTED_MODULE_1_react__["createElement"](__WEBPACK_IMPORTED_MODULE_9__Prompts__["a" /* default */], {
-      message: msg,
-      btnLabel: btnLabel,
-      onBtnClick: this.handlePromptBtnClick });
   }
 
   restartCalibration() {
 
-    const handsOn = this.state.hands && this.state.hands.length;
-
     this.setState({
-      mode: MODE_CALIBRATING,
+      showLeapZone: false,
+      isCalibrating: true,
       calibrationStep: 0,
       calibrationPts: [],
-      calibrationReady: !handsOn,
+      calibrationReady: !this.handsOn,
       calibrationRegistering: false
     });
 
@@ -26940,36 +26939,47 @@ class App extends __WEBPACK_IMPORTED_MODULE_1_react__["Component"] {
 
     this.stepPts = [];
   }
-  updateCalibration(hands = []) {
+  updateCalibration() {
+
+    const hands = this.state.hands;
 
     if (!this.state.calibrationReady) {
+
       if (!hands.length) {
         this.resetCalibrationStep();
         this.setState({
           calibrationReady: true
         });
       }
-    } else if (hands.length > 1) {
-      this.setState({
-        calibrationReady: false,
-        calibrationRegistering: false
-      });
-    } else if (hands[0]) {
+    } else {
 
-      this.setState({
-        calibrationRegistering: true
-      });
+      if (hands.length > 1) {
+        this.setState({
+          calibrationReady: false,
+          calibrationRegistering: false
+        });
+      } else if (hands[0]) {
 
-      if (this.timeoutCalibration === undefined) {
-        this.timeoutCalibration = setTimeout(this.handleCalibrationTimeout.bind(this), CALIBRATION_HOLD_DURATION * 1000);
+        this.setState({
+          calibrationRegistering: true
+        });
+
+        if (this.timeoutCalibration === undefined) {
+          this.timeoutCalibration = setTimeout(this.handleCalibrationTimeout.bind(this), CALIBRATION_HOLD_DURATION * 1000);
+        }
+
+        this.stepPts.push({
+          x: hands[0].x,
+          y: hands[0].y
+        });
+
+        this.checkStepPts();
+      } else {
+        this.setState({
+          calibrationRegistering: false
+        });
+        this.resetCalibrationStep();
       }
-
-      this.stepPts.push({
-        x: hands[0].x,
-        y: hands[0].y
-      });
-
-      this.checkStepPts();
     }
   }
   checkStepPts() {
@@ -27001,10 +27011,10 @@ class App extends __WEBPACK_IMPORTED_MODULE_1_react__["Component"] {
   }
   completeCalibration() {
 
-    let avgL = __WEBPACK_IMPORTED_MODULE_4_varyd_utils__["a" /* maths */].lerp(this.savedPts[0].x, this.savedPts[2].x, 0.5),
-        avgR = __WEBPACK_IMPORTED_MODULE_4_varyd_utils__["a" /* maths */].lerp(this.savedPts[1].x, this.savedPts[3].x, 0.5),
-        avgT = __WEBPACK_IMPORTED_MODULE_4_varyd_utils__["a" /* maths */].lerp(this.savedPts[0].y, this.savedPts[1].y, 0.5),
-        avgB = __WEBPACK_IMPORTED_MODULE_4_varyd_utils__["a" /* maths */].lerp(this.savedPts[2].y, this.savedPts[3].y, 0.5);
+    let avgL = __WEBPACK_IMPORTED_MODULE_5_varyd_utils__["c" /* maths */].lerp(this.savedPts[0].x, this.savedPts[2].x, 0.5),
+        avgR = __WEBPACK_IMPORTED_MODULE_5_varyd_utils__["c" /* maths */].lerp(this.savedPts[1].x, this.savedPts[3].x, 0.5),
+        avgT = __WEBPACK_IMPORTED_MODULE_5_varyd_utils__["c" /* maths */].lerp(this.savedPts[0].y, this.savedPts[1].y, 0.5),
+        avgB = __WEBPACK_IMPORTED_MODULE_5_varyd_utils__["c" /* maths */].lerp(this.savedPts[2].y, this.savedPts[3].y, 0.5);
 
     const padW = this.state.winW * CALIBRATION_PAD_PERC,
           padH = this.state.winH * CALIBRATION_PAD_PERC;
@@ -27017,12 +27027,13 @@ class App extends __WEBPACK_IMPORTED_MODULE_1_react__["Component"] {
         maxY = minY + areaH;
 
     this.setState({
-      appMinX: __WEBPACK_IMPORTED_MODULE_4_varyd_utils__["a" /* maths */].roundTo(minX, 2),
-      appMinY: __WEBPACK_IMPORTED_MODULE_4_varyd_utils__["a" /* maths */].roundTo(minY, 2),
-      appMaxX: __WEBPACK_IMPORTED_MODULE_4_varyd_utils__["a" /* maths */].roundTo(maxX, 2),
-      appMaxY: __WEBPACK_IMPORTED_MODULE_4_varyd_utils__["a" /* maths */].roundTo(maxY, 2),
+      appMinX: __WEBPACK_IMPORTED_MODULE_5_varyd_utils__["c" /* maths */].roundTo(minX, 1),
+      appMinY: __WEBPACK_IMPORTED_MODULE_5_varyd_utils__["c" /* maths */].roundTo(minY, 1),
+      appMaxX: __WEBPACK_IMPORTED_MODULE_5_varyd_utils__["c" /* maths */].roundTo(maxX, 1),
+      appMaxY: __WEBPACK_IMPORTED_MODULE_5_varyd_utils__["c" /* maths */].roundTo(maxY, 1),
       calibrationStep: CALIBRATION_STEPS,
-      mode: MODE_CALIBRATION_COMPLETE
+      isCalibrating: false,
+      showLeapZone: false
     });
   }
   saveCalibrationPt() {
@@ -27038,29 +27049,93 @@ class App extends __WEBPACK_IMPORTED_MODULE_1_react__["Component"] {
     };
   }
 
+  updateHeatmap() {
+
+    const MAX_HISTORY = 10000;
+
+    const rectLeap = new __WEBPACK_IMPORTED_MODULE_5_varyd_utils__["b" /* Rect */](this.state.leapMinX, this.state.leapMinY, this.state.leapMaxX - this.state.leapMinX, this.state.leapMaxY - this.state.leapMinY);
+    const rectApp = new __WEBPACK_IMPORTED_MODULE_5_varyd_utils__["b" /* Rect */](this.state.appMinX, this.state.appMinY, this.state.appMaxX - this.state.appMinX, this.state.appMaxY - this.state.appMinY);
+    const normRect = this.state.showLeapZone ? rectLeap : rectApp;
+
+    this.heatmap = [];
+    this.history = this.history.concat(this.state.hands);
+
+    if (this.history.length > MAX_HISTORY) {
+      this.history = this.history.slice(-MAX_HISTORY);
+    }
+
+    this.history.forEach(hand => {
+
+      let col = Math.floor(normRect.normX(hand.x) * HEATMAP_COLS),
+          row = Math.floor(normRect.normY(hand.y) * HEATMAP_ROWS),
+          index = row * HEATMAP_COLS + col;
+
+      if (!this.heatmap[index]) {
+        this.heatmap[index] = [hand.confidence];
+      } else {
+        this.heatmap[index].push(hand.confidence);
+      }
+    });
+
+    this.heatmap.forEach((history, i) => {
+      this.heatmap[i] = this.heatmap[i].reduce((sum, cur) => sum + cur, 0) / (this.heatmap[i].length || 1);
+    });
+  }
+
   // React lifecycle
 
   render() {
 
-    const rectApp = this.getAppAreaRect(),
+    const hasCalibration = this.state.appMinX !== undefined && this.state.appMinY !== undefined && this.state.appMaxX !== undefined && this.state.appMaxY !== undefined;
+
+    const rectApp = hasCalibration ? this.getAppAreaRect() : undefined,
           hands = this.getHandsViewData();
+
+    const promptMsg = this.getPrompt();
+
+    const appClasses = __WEBPACK_IMPORTED_MODULE_4_classnames___default()({
+      "app": true,
+      "hands-on": this.handsOn
+    });
 
     return __WEBPACK_IMPORTED_MODULE_1_react__["createElement"](
       'div',
-      { className: 'app' },
-      __WEBPACK_IMPORTED_MODULE_1_react__["createElement"](__WEBPACK_IMPORTED_MODULE_8__AppArea__["a" /* default */], {
-        appL: rectApp.x,
-        appT: rectApp.y,
-        appW: rectApp.w,
-        appH: rectApp.h }),
-      hands.length > 0 && __WEBPACK_IMPORTED_MODULE_1_react__["createElement"](__WEBPACK_IMPORTED_MODULE_7__HandsDisplay__["a" /* default */], {
+      { className: appClasses },
+      this.state.showHeatmap && !this.state.isCalibrating && __WEBPACK_IMPORTED_MODULE_1_react__["createElement"](__WEBPACK_IMPORTED_MODULE_7__Heatmap__["a" /* default */], {
+        colCount: HEATMAP_COLS,
+        rowCount: HEATMAP_ROWS,
+        data: this.heatmap }),
+      this.state.showLeapZone && hasCalibration && __WEBPACK_IMPORTED_MODULE_1_react__["createElement"](
+        'div',
+        {
+          className: 'app-zone',
+          style: {
+            left: rectApp.x + 'px',
+            top: rectApp.y + 'px',
+            width: rectApp.w + 'px',
+            height: rectApp.h + 'px'
+          } },
+        __WEBPACK_IMPORTED_MODULE_1_react__["createElement"](
+          'p',
+          null,
+          'App window area'
+        )
+      ),
+      hands.length > 0 && __WEBPACK_IMPORTED_MODULE_1_react__["createElement"](__WEBPACK_IMPORTED_MODULE_9__HandsDisplay__["a" /* default */], {
         hands: hands }),
-      this.getPrompts(),
-      this.state.mode != MODE_CALIBRATING && __WEBPACK_IMPORTED_MODULE_1_react__["createElement"](__WEBPACK_IMPORTED_MODULE_6__ControlsPanel__["a" /* default */], {
+      promptMsg && __WEBPACK_IMPORTED_MODULE_1_react__["createElement"](
+        'div',
+        { className: 'prompt' },
+        __WEBPACK_IMPORTED_MODULE_1_react__["createElement"](
+          'p',
+          null,
+          promptMsg
+        )
+      ),
+      !this.state.isCalibrating && __WEBPACK_IMPORTED_MODULE_1_react__["createElement"](__WEBPACK_IMPORTED_MODULE_8__ControlsPanel__["a" /* default */], {
         fullscreen: this.state.fullscreen,
+        showHeatmap: this.state.showHeatmap,
         showLeapZone: this.state.showLeapZone,
-        invertX: this.state.invertX,
-        invertY: this.state.invertY,
         appMinX: this.state.appMinX,
         appMinY: this.state.appMinY,
         appMaxX: this.state.appMaxX,
@@ -27070,15 +27145,16 @@ class App extends __WEBPACK_IMPORTED_MODULE_1_react__["Component"] {
         leapMaxX: this.state.leapMaxX,
         leapMaxY: this.state.leapMaxY,
         onControlChange: this.handleControlChange,
-        onInvertAxisChange: this.handleInvertAxisChange,
-        onFullScreenCheckboxChange: this.handleFullScreenCheckboxChange }),
-      this.state.mode == MODE_CALIBRATING && __WEBPACK_IMPORTED_MODULE_1_react__["createElement"](__WEBPACK_IMPORTED_MODULE_10__Calibration__["a" /* default */], {
+        onFullScreenCheckboxChange: this.handleFullScreenCheckboxChange,
+        onRecalibrateClick: this.handleRecalibrateClick }),
+      this.state.isCalibrating && __WEBPACK_IMPORTED_MODULE_1_react__["createElement"](__WEBPACK_IMPORTED_MODULE_10__Calibration__["a" /* default */], {
         padPerc: CALIBRATION_PAD_PERC,
         step: this.state.calibrationStep,
         ready: this.state.calibrationReady,
         registering: this.state.calibrationRegistering,
         winW: this.state.winW,
-        winH: this.state.winH })
+        winH: this.state.winH }),
+      __WEBPACK_IMPORTED_MODULE_1_react__["createElement"]('div', { className: 'frame' })
     );
   }
 
@@ -27109,7 +27185,7 @@ class App extends __WEBPACK_IMPORTED_MODULE_1_react__["Component"] {
 
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -27123,7 +27199,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(48)(content, options);
+var update = __webpack_require__(47)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -27140,93 +27216,25 @@ if(false) {
 }
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports) {
 
 module.exports = ReactDOM;
-
-/***/ }),
-/* 28 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_lodash__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_leapjs__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_leapjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_leapjs__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_varyd_utils__ = __webpack_require__(2);
-
-// Imports
-
-
-
-
-
-
-
-// Constants
-
-
-// Class
-
-class AppArea extends __WEBPACK_IMPORTED_MODULE_1_react__["Component"] {
-
-  // Constructor
-
-  constructor() {
-
-    super();
-
-    this.initState();
-    this.initBindings();
-  }
-
-  initState() {}
-
-  initBindings() {}
-
-  // Event handlers
-
-
-  // Methods
-
-
-  // React lifecycle
-
-  render() {
-
-    let r = new __WEBPACK_IMPORTED_MODULE_3_varyd_utils__["b" /* Rect */](this.props.appL, this.props.appT, this.props.appW, this.props.appH).absolutized();
-
-    return __WEBPACK_IMPORTED_MODULE_1_react__["createElement"]('div', {
-      className: 'appZone',
-      style: {
-        left: r.x + 'px',
-        top: r.y + 'px',
-        width: r.w + 'px',
-        height: r.h + 'px'
-      } });
-  }
-
-}
-/* harmony export (immutable) */ __webpack_exports__["a"] = AppArea;
-
 
 /***/ }),
 /* 29 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_lodash__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_leapjs__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_leapjs__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_leapjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_leapjs__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_classnames__ = __webpack_require__(36);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_classnames__ = __webpack_require__(15);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_classnames___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_classnames__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_varyd_utils__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_varyd_utils__ = __webpack_require__(3);
 
 // Imports
 
@@ -27295,8 +27303,8 @@ class Calibration extends __WEBPACK_IMPORTED_MODULE_1_react__["Component"] {
     }
 
     return {
-      x: __WEBPACK_IMPORTED_MODULE_4_varyd_utils__["a" /* maths */].lerp(0, this.props.winW, percX),
-      y: __WEBPACK_IMPORTED_MODULE_4_varyd_utils__["a" /* maths */].lerp(0, this.props.winH, percY)
+      x: __WEBPACK_IMPORTED_MODULE_4_varyd_utils__["c" /* maths */].lerp(0, this.props.winW, percX),
+      y: __WEBPACK_IMPORTED_MODULE_4_varyd_utils__["c" /* maths */].lerp(0, this.props.winH, percY)
     };
   }
 
@@ -27304,10 +27312,10 @@ class Calibration extends __WEBPACK_IMPORTED_MODULE_1_react__["Component"] {
 
   render() {
 
-    const x1 = __WEBPACK_IMPORTED_MODULE_4_varyd_utils__["a" /* maths */].lerp(0, this.props.winW, this.props.padPerc),
-          x2 = __WEBPACK_IMPORTED_MODULE_4_varyd_utils__["a" /* maths */].lerp(0, this.props.winW, 1 - this.props.padPerc),
-          y1 = __WEBPACK_IMPORTED_MODULE_4_varyd_utils__["a" /* maths */].lerp(0, this.props.winH, this.props.padPerc),
-          y2 = __WEBPACK_IMPORTED_MODULE_4_varyd_utils__["a" /* maths */].lerp(0, this.props.winH, 1 - this.props.padPerc);
+    const x1 = __WEBPACK_IMPORTED_MODULE_4_varyd_utils__["c" /* maths */].lerp(0, this.props.winW, this.props.padPerc),
+          x2 = __WEBPACK_IMPORTED_MODULE_4_varyd_utils__["c" /* maths */].lerp(0, this.props.winW, 1 - this.props.padPerc),
+          y1 = __WEBPACK_IMPORTED_MODULE_4_varyd_utils__["c" /* maths */].lerp(0, this.props.winH, this.props.padPerc),
+          y2 = __WEBPACK_IMPORTED_MODULE_4_varyd_utils__["c" /* maths */].lerp(0, this.props.winH, 1 - this.props.padPerc);
 
     const pts = [{ x: x1, y: y1 }, { x: x2, y: y1 }, { x: x1, y: y2 }, { x: x2, y: y2 }];
 
@@ -27348,13 +27356,13 @@ class Calibration extends __WEBPACK_IMPORTED_MODULE_1_react__["Component"] {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_lodash__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_leapjs__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_leapjs__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_leapjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_leapjs__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_varyd_utils__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_varyd_utils__ = __webpack_require__(3);
 
 // Imports
 
@@ -27390,10 +27398,16 @@ class ControlsPanel extends __WEBPACK_IMPORTED_MODULE_1_react__["Component"] {
 
   // Methods
 
+  getAppAreaJSON() {
+
+    return '{\n' + `  xMin: ${this.props.appMinX},\n` + `  xMax: ${this.props.appMaxX},\n` + `  yMin: ${this.props.appMinY},\n` + `  yMax: ${this.props.appMaxY}\n` + '}\n';
+  }
 
   // React lifecycle
 
   render() {
+
+    const hasCalibration = this.props.appMinX !== undefined && this.props.appMinY !== undefined && this.props.appMaxX !== undefined && this.props.appMaxY !== undefined;
 
     return __WEBPACK_IMPORTED_MODULE_1_react__["createElement"](
       'div',
@@ -27426,6 +27440,22 @@ class ControlsPanel extends __WEBPACK_IMPORTED_MODULE_1_react__["Component"] {
           null,
           __WEBPACK_IMPORTED_MODULE_1_react__["createElement"]('input', {
             type: 'checkbox',
+            name: 'showHeatmap',
+            checked: this.props.showHeatmap,
+            onChange: this.props.onControlChange }),
+          __WEBPACK_IMPORTED_MODULE_1_react__["createElement"](
+            'strong',
+            null,
+            '[H]'
+          ),
+          ' Show confidence heat map'
+        ),
+        __WEBPACK_IMPORTED_MODULE_1_react__["createElement"]('br', null),
+        __WEBPACK_IMPORTED_MODULE_1_react__["createElement"](
+          'label',
+          null,
+          __WEBPACK_IMPORTED_MODULE_1_react__["createElement"]('input', {
+            type: 'checkbox',
             name: 'showLeapZone',
             checked: this.props.showLeapZone,
             onChange: this.props.onControlChange }),
@@ -27434,28 +27464,7 @@ class ControlsPanel extends __WEBPACK_IMPORTED_MODULE_1_react__["Component"] {
             null,
             '[L]'
           ),
-          ' Show raw leap data view'
-        ),
-        __WEBPACK_IMPORTED_MODULE_1_react__["createElement"]('br', null),
-        __WEBPACK_IMPORTED_MODULE_1_react__["createElement"](
-          'label',
-          null,
-          __WEBPACK_IMPORTED_MODULE_1_react__["createElement"]('input', {
-            type: 'checkbox',
-            name: 'invertX',
-            checked: this.props.invertX,
-            onChange: this.props.onInvertAxisChange }),
-          'Invert X'
-        ),
-        __WEBPACK_IMPORTED_MODULE_1_react__["createElement"](
-          'label',
-          null,
-          __WEBPACK_IMPORTED_MODULE_1_react__["createElement"]('input', {
-            type: 'checkbox',
-            name: 'invertY',
-            checked: this.props.invertY,
-            onChange: this.props.onInvertAxisChange }),
-          'Invert Y'
+          ' Show full leap area'
         )
       ),
       __WEBPACK_IMPORTED_MODULE_1_react__["createElement"](
@@ -27466,46 +27475,52 @@ class ControlsPanel extends __WEBPACK_IMPORTED_MODULE_1_react__["Component"] {
           null,
           'App zone'
         ),
-        __WEBPACK_IMPORTED_MODULE_1_react__["createElement"](
-          'label',
-          null,
+        hasCalibration && __WEBPACK_IMPORTED_MODULE_1_react__["createElement"](
+          'p',
+          { className: 'area' },
           __WEBPACK_IMPORTED_MODULE_1_react__["createElement"]('input', {
-            type: 'number',
-            name: 'appMinX',
-            value: this.props.appMinX,
-            onChange: this.props.onControlChange }),
-          'x min'
-        ),
-        __WEBPACK_IMPORTED_MODULE_1_react__["createElement"](
-          'label',
-          null,
-          __WEBPACK_IMPORTED_MODULE_1_react__["createElement"]('input', {
-            type: 'number',
-            name: 'appMaxX',
-            value: this.props.appMaxX,
-            onChange: this.props.onControlChange }),
-          'x max'
-        ),
-        __WEBPACK_IMPORTED_MODULE_1_react__["createElement"]('br', null),
-        __WEBPACK_IMPORTED_MODULE_1_react__["createElement"](
-          'label',
-          null,
-          __WEBPACK_IMPORTED_MODULE_1_react__["createElement"]('input', {
+            className: 'area-top',
             type: 'number',
             name: 'appMinY',
             value: this.props.appMinY,
             onChange: this.props.onControlChange }),
-          'y min'
-        ),
-        __WEBPACK_IMPORTED_MODULE_1_react__["createElement"](
-          'label',
-          null,
           __WEBPACK_IMPORTED_MODULE_1_react__["createElement"]('input', {
+            className: 'area-left',
+            type: 'number',
+            name: 'appMinX',
+            value: this.props.appMinX,
+            onChange: this.props.onControlChange }),
+          __WEBPACK_IMPORTED_MODULE_1_react__["createElement"]('input', {
+            className: 'area-right',
+            type: 'number',
+            name: 'appMaxX',
+            value: this.props.appMaxX,
+            onChange: this.props.onControlChange }),
+          __WEBPACK_IMPORTED_MODULE_1_react__["createElement"]('input', {
+            className: 'area-btm',
             type: 'number',
             name: 'appMaxY',
             value: this.props.appMaxY,
-            onChange: this.props.onControlChange }),
-          'y max'
+            onChange: this.props.onControlChange })
+        ),
+        __WEBPACK_IMPORTED_MODULE_1_react__["createElement"](
+          'p',
+          null,
+          __WEBPACK_IMPORTED_MODULE_1_react__["createElement"](
+            'button',
+            {
+              className: 'recalibrate',
+              onClick: this.props.onRecalibrateClick },
+            'Recalibrate'
+          )
+        ),
+        hasCalibration && __WEBPACK_IMPORTED_MODULE_1_react__["createElement"](
+          'p',
+          null,
+          __WEBPACK_IMPORTED_MODULE_1_react__["createElement"]('textarea', {
+            className: 'raw-json',
+            readOnly: true,
+            value: this.getAppAreaJSON() })
         )
       ),
       __WEBPACK_IMPORTED_MODULE_1_react__["createElement"](
@@ -27517,45 +27532,32 @@ class ControlsPanel extends __WEBPACK_IMPORTED_MODULE_1_react__["Component"] {
           'Leap zone'
         ),
         __WEBPACK_IMPORTED_MODULE_1_react__["createElement"](
-          'label',
-          null,
+          'p',
+          { className: 'area' },
           __WEBPACK_IMPORTED_MODULE_1_react__["createElement"]('input', {
-            type: 'text',
-            name: 'leapMinX',
-            value: this.props.leapMinX,
-            readOnly: true }),
-          'x min'
-        ),
-        __WEBPACK_IMPORTED_MODULE_1_react__["createElement"](
-          'label',
-          null,
-          __WEBPACK_IMPORTED_MODULE_1_react__["createElement"]('input', {
-            type: 'text',
-            name: 'leapMaxX',
-            value: this.props.leapMaxX,
-            readOnly: true }),
-          'x max'
-        ),
-        __WEBPACK_IMPORTED_MODULE_1_react__["createElement"]('br', null),
-        __WEBPACK_IMPORTED_MODULE_1_react__["createElement"](
-          'label',
-          null,
-          __WEBPACK_IMPORTED_MODULE_1_react__["createElement"]('input', {
+            className: 'area-top',
             type: 'text',
             name: 'leapMinY',
             value: this.props.leapMinY,
             readOnly: true }),
-          'y min'
-        ),
-        __WEBPACK_IMPORTED_MODULE_1_react__["createElement"](
-          'label',
-          null,
           __WEBPACK_IMPORTED_MODULE_1_react__["createElement"]('input', {
+            className: 'area-left',
+            type: 'text',
+            name: 'leapMinX',
+            value: this.props.leapMinX,
+            readOnly: true }),
+          __WEBPACK_IMPORTED_MODULE_1_react__["createElement"]('input', {
+            className: 'area-right',
+            type: 'text',
+            name: 'leapMaxX',
+            value: this.props.leapMaxX,
+            readOnly: true }),
+          __WEBPACK_IMPORTED_MODULE_1_react__["createElement"]('input', {
+            className: 'area-btm',
             type: 'text',
             name: 'leapMaxY',
             value: this.props.leapMaxY,
-            readOnly: true }),
-          'y max'
+            readOnly: true })
         )
       )
     );
@@ -27570,13 +27572,13 @@ class ControlsPanel extends __WEBPACK_IMPORTED_MODULE_1_react__["Component"] {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_lodash__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_leapjs__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_leapjs__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_leapjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_leapjs__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_varyd_utils__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_varyd_utils__ = __webpack_require__(3);
 
 // Imports
 
@@ -27620,14 +27622,10 @@ class HandsDisplay extends __WEBPACK_IMPORTED_MODULE_1_react__["Component"] {
     return __WEBPACK_IMPORTED_MODULE_1_react__["createElement"](
       'ul',
       { className: 'hands' },
-      this.props.hands.map((hand, i) => __WEBPACK_IMPORTED_MODULE_1_react__["createElement"]('li', {
+      this.props.hands.map((handStyle, i) => __WEBPACK_IMPORTED_MODULE_1_react__["createElement"]('li', {
         key: i,
         className: 'hand',
-        style: {
-          backgroundColor: hand.color,
-          left: hand.x + 'px',
-          top: hand.y + 'px'
-        } }))
+        style: handStyle }))
     );
   }
 
@@ -27640,13 +27638,13 @@ class HandsDisplay extends __WEBPACK_IMPORTED_MODULE_1_react__["Component"] {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_lodash__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_leapjs__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_leapjs__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_leapjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_leapjs__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_varyd_utils__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_varyd_utils__ = __webpack_require__(3);
 
 // Imports
 
@@ -27658,10 +27656,9 @@ class HandsDisplay extends __WEBPACK_IMPORTED_MODULE_1_react__["Component"] {
 
 // Constants
 
-
 // Class
 
-class Prompts extends __WEBPACK_IMPORTED_MODULE_1_react__["Component"] {
+class Heatmap extends __WEBPACK_IMPORTED_MODULE_1_react__["Component"] {
 
   // Constructor
 
@@ -27682,37 +27679,34 @@ class Prompts extends __WEBPACK_IMPORTED_MODULE_1_react__["Component"] {
 
   // Methods
 
+  getLeft(index) {
+    const col = index % this.props.colCount;
+    return Math.round((col + 0.5) / this.props.colCount * window.innerWidth);
+  }
+  getTop(index) {
+    const row = Math.floor(index / this.props.colCount);
+    return Math.round((row + 0.5) / this.props.rowCount * window.innerHeight);
+  }
 
   // React lifecycle
 
   render() {
 
-    const hasMsg = this.props.message && this.props.message.length,
-          hasBtn = this.props.btnLabel && this.props.btnLabel.length && this.props.onBtnClick;
-
     return __WEBPACK_IMPORTED_MODULE_1_react__["createElement"](
-      'div',
-      { className: 'prompts' },
-      hasMsg && __WEBPACK_IMPORTED_MODULE_1_react__["createElement"](
-        'p',
-        null,
-        this.props.message
-      ),
-      hasBtn && __WEBPACK_IMPORTED_MODULE_1_react__["createElement"](
-        'p',
-        null,
-        __WEBPACK_IMPORTED_MODULE_1_react__["createElement"](
-          'button',
-          {
-            onClick: this.props.onBtnClick },
-          this.props.btnLabel
-        )
-      )
+      'ul',
+      { className: 'heatmap' },
+      this.props.data.map((amt, i) => __WEBPACK_IMPORTED_MODULE_1_react__["createElement"]('li', {
+        key: i,
+        style: {
+          left: this.getLeft(i) + 'px',
+          top: this.getTop(i) + 'px',
+          backgroundColor: `hsl(${__WEBPACK_IMPORTED_MODULE_3_varyd_utils__["c" /* maths */].lerp(0, 140, amt)}, 100%, 50%)`
+        } }))
     );
   }
 
 }
-/* harmony export (immutable) */ __webpack_exports__["a"] = Prompts;
+/* harmony export (immutable) */ __webpack_exports__["a"] = Heatmap;
 
 
 /***/ }),
@@ -27721,13 +27715,13 @@ class Prompts extends __WEBPACK_IMPORTED_MODULE_1_react__["Component"] {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_dom__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_dom__ = __webpack_require__(28);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_dom___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_react_dom__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__styles_style_scss__ = __webpack_require__(26);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__styles_style_scss__ = __webpack_require__(27);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__styles_style_scss___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__styles_style_scss__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_App__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_App__ = __webpack_require__(26);
 
 
 
@@ -27742,10 +27736,10 @@ __WEBPACK_IMPORTED_MODULE_1_react_dom__["render"](__WEBPACK_IMPORTED_MODULE_0_re
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_lodash__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_varyd_utils__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_leapjs__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_varyd_utils__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_leapjs__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_leapjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_leapjs__);
 
 // Imports
@@ -27761,7 +27755,7 @@ __WEBPACK_IMPORTED_MODULE_1_react_dom__["render"](__WEBPACK_IMPORTED_MODULE_0_re
 
 // Class
 
-class LeapAgent extends __WEBPACK_IMPORTED_MODULE_1_varyd_utils__["c" /* Dispatcher */] {
+class LeapAgent extends __WEBPACK_IMPORTED_MODULE_1_varyd_utils__["d" /* Dispatcher */] {
 
   // Constructor
 
@@ -27783,12 +27777,16 @@ class LeapAgent extends __WEBPACK_IMPORTED_MODULE_1_varyd_utils__["c" /* Dispatc
     return this._xMax;
   }
   set xMin(val) {
-    this._xMin = val;
-    super.dispatch('zoneUpdate');
+    if (val !== this._xMin) {
+      this._xMin = val;
+      super.dispatch('zoneUpdate');
+    }
   }
   set xMax(val) {
-    this._xMax = val;
-    super.dispatch('zoneUpdate');
+    if (val !== this._xMax) {
+      this._xMax = val;
+      super.dispatch('zoneUpdate');
+    }
   }
 
   get yMin() {
@@ -27798,12 +27796,16 @@ class LeapAgent extends __WEBPACK_IMPORTED_MODULE_1_varyd_utils__["c" /* Dispatc
     return this._yMax;
   }
   set yMin(val) {
-    this._yMin = val;
-    super.dispatch('zoneUpdate');
+    if (val !== this._yMin) {
+      this._yMin = val;
+      super.dispatch('zoneUpdate');
+    }
   }
   set yMax(val) {
-    this._yMax = val;
-    super.dispatch('zoneUpdate');
+    if (val !== this._yMax) {
+      this._yMax = val;
+      super.dispatch('zoneUpdate');
+    }
   }
 
   get zMin() {
@@ -27813,12 +27815,16 @@ class LeapAgent extends __WEBPACK_IMPORTED_MODULE_1_varyd_utils__["c" /* Dispatc
     return this._zMax;
   }
   set zMin(val) {
-    this._zMin = val;
-    super.dispatch('zoneUpdate');
+    if (val !== this._zMin) {
+      this._zMin = val;
+      super.dispatch('zoneUpdate');
+    }
   }
   set zMax(val) {
-    this._zMax = val;
-    super.dispatch('zoneUpdate');
+    if (val !== this._zMax) {
+      this._zMax = val;
+      super.dispatch('zoneUpdate');
+    }
   }
 
   // Event handlers
@@ -27844,9 +27850,9 @@ class LeapAgent extends __WEBPACK_IMPORTED_MODULE_1_varyd_utils__["c" /* Dispatc
 
       this.updateZone(x, y, z);
 
-      let percX = __WEBPACK_IMPORTED_MODULE_1_varyd_utils__["a" /* maths */].norm(x, this.xMin, this.xMax),
-          percY = __WEBPACK_IMPORTED_MODULE_1_varyd_utils__["a" /* maths */].norm(y, this.yMin, this.yMax),
-          percZ = __WEBPACK_IMPORTED_MODULE_1_varyd_utils__["a" /* maths */].norm(z, this.zMin, this.zMax);
+      let percX = __WEBPACK_IMPORTED_MODULE_1_varyd_utils__["c" /* maths */].norm(x, this.xMin, this.xMax),
+          percY = __WEBPACK_IMPORTED_MODULE_1_varyd_utils__["c" /* maths */].norm(y, this.yMin, this.yMax),
+          percZ = __WEBPACK_IMPORTED_MODULE_1_varyd_utils__["c" /* maths */].norm(z, this.zMin, this.zMax);
 
       return {
 
@@ -27903,73 +27909,18 @@ class LeapAgent extends __WEBPACK_IMPORTED_MODULE_1_varyd_utils__["c" /* Dispatc
 /* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(37)(undefined);
+exports = module.exports = __webpack_require__(36)(undefined);
 // imports
 
 
 // module
-exports.push([module.i, "body {\n  margin: 0;\n  padding: 0;\n  background: black;\n  color: white;\n  font-family: -apple-system, BlinkMacSystemFont, sans-serif; }\n\n* {\n  box-sizing: border-box; }\n\ndiv.controls {\n  position: absolute;\n  top: 25px;\n  left: 25px;\n  padding: 10px;\n  background: white;\n  color: black;\n  font-size: 13px;\n  border-radius: 5px; }\n  div.controls strong {\n    color: #f06; }\n  div.controls label {\n    display: inline-block;\n    margin-bottom: 5px; }\n    div.controls label + label {\n      margin-left: 15px; }\n  div.controls input {\n    margin-right: 7px; }\n    div.controls input[type=text], div.controls input[type=number] {\n      width: 75px; }\n  div.controls fieldset {\n    border-color: #ccc;\n    border-style: solid;\n    border-width: 1px;\n    border-radius: 3px;\n    margin-bottom: 10px; }\n    div.controls fieldset legend {\n      color: #f06;\n      font-weight: bold; }\n\ndiv.prompts {\n  position: absolute;\n  top: 50%;\n  left: 50%;\n  transform: translate(-50%, -50%);\n  width: 500px; }\n  div.prompts p {\n    text-align: center;\n    font-size: 45px;\n    margin: 0.75em 0; }\n    div.prompts p button {\n      border: 3px solid #f05;\n      border-radius: 10px;\n      background-color: transparent;\n      padding: 15px 20px;\n      color: #f05;\n      font-size: 24px;\n      letter-spacing: 0.01em; }\n      div.prompts p button:active {\n        background-color: #f05;\n        border-color: transparent;\n        color: black; }\n\ndiv.appZone {\n  position: absolute;\n  border: 3px solid #f05; }\n\nul.hands {\n  list-style: none;\n  margin: 0;\n  padding: 0; }\n  ul.hands li.hand {\n    position: absolute;\n    transform: translate(-50%, -50%);\n    background-color: #cf0;\n    width: 50px;\n    height: 50px;\n    border-radius: 50px; }\n\ndiv.calibration div.marker {\n  position: absolute;\n  transform: translate(-50%, -50%);\n  width: 35px;\n  height: 35px;\n  border: 3px dotted #222;\n  border-radius: 50px;\n  text-align: center;\n  padding-top: 7px;\n  color: transparent; }\n  div.calibration div.marker.complete {\n    border: 2px solid #cf0;\n    background-color: transparent;\n    color: #cf0; }\n  div.calibration div.marker.current {\n    border-style: solid;\n    border-color: #0cc; }\n  div.calibration div.marker.registering {\n    background-color: #0cc; }\n", ""]);
+exports.push([module.i, "body {\n  margin: 0;\n  padding: 0;\n  background: black;\n  color: white;\n  font-family: -apple-system, BlinkMacSystemFont, sans-serif; }\n\n* {\n  box-sizing: border-box; }\n\ndiv.frame {\n  position: absolute;\n  left: 0px;\n  top: 0px;\n  width: 100%;\n  height: 100%;\n  border-width: 0px;\n  border-color: #f05;\n  border-style: solid;\n  transition: border-width 200ms ease;\n  overflow: hidden;\n  pointer-events: none; }\n\n.hands-on div.frame {\n  border-width: 5px; }\n\ndiv.controls {\n  position: absolute;\n  top: 25px;\n  left: 25px;\n  padding: 10px;\n  background: white;\n  color: black;\n  font-size: 13px;\n  border-radius: 5px; }\n  div.controls strong {\n    color: #f05; }\n  div.controls fieldset {\n    border-color: #ccc;\n    border-style: solid;\n    border-width: 1px;\n    border-radius: 4px;\n    margin-bottom: 10px; }\n    div.controls fieldset:last-child {\n      margin-bottom: 5px; }\n    div.controls fieldset legend {\n      color: #f05;\n      font-weight: bold; }\n    div.controls fieldset label {\n      display: inline-block;\n      margin-bottom: 5px; }\n      div.controls fieldset label + label {\n        margin-left: 15px; }\n      div.controls fieldset label input[type=checkbox] {\n        margin-right: 7px; }\n    div.controls fieldset p {\n      width: 180px;\n      margin: 10px; }\n      div.controls fieldset p.area {\n        position: relative;\n        height: 90px; }\n        div.controls fieldset p.area input {\n          position: absolute;\n          width: 65px;\n          height: 22px;\n          text-align: center;\n          border: 1px solid #ccc;\n          border-radius: 4px; }\n          div.controls fieldset p.area input.area-top {\n            left: 50%;\n            top: 0px;\n            transform: translate(-50%, 0px); }\n          div.controls fieldset p.area input.area-left {\n            left: 0px;\n            top: 50%;\n            transform: translate(0px, -50%); }\n          div.controls fieldset p.area input.area-right {\n            right: 0px;\n            top: 50%;\n            transform: translate(0px, -50%); }\n          div.controls fieldset p.area input.area-btm {\n            left: 50%;\n            bottom: 0px;\n            transform: translate(-50%, 0px); }\n      div.controls fieldset p textarea.raw-json {\n        height: 100px;\n        width: 100%;\n        border: 1px solid #ccc;\n        border-radius: 4px;\n        font-family: Menlo, Monaco, Consolas, monospace;\n        padding: 5px;\n        color: #555; }\n      div.controls fieldset p button {\n        margin: 10px 0px;\n        width: 100%;\n        height: 30px;\n        background-color: white;\n        border: 2px solid #f05;\n        border-radius: 4px;\n        color: #f05;\n        font-weight: bold; }\n        div.controls fieldset p button:active {\n          background-color: #f05;\n          color: white; }\n\ndiv.prompt {\n  pointer-events: none;\n  position: absolute;\n  top: 50%;\n  left: 50%;\n  transform: translate(-50%, -50%);\n  width: 500px; }\n  div.prompt p {\n    text-align: center;\n    font-size: 45px;\n    margin: 0.75em 0; }\n\ndiv.app-zone {\n  pointer-events: none;\n  position: absolute;\n  border: 2px dotted #0cc;\n  background: rgba(0, 208, 208, 0.2); }\n  div.app-zone p {\n    position: absolute;\n    left: 50%;\n    top: 50%;\n    transform: translate(-50%, -50%);\n    color: #0cc;\n    margin: 0px;\n    padding: 0px; }\n\nul.hands {\n  pointer-events: none;\n  list-style: none;\n  margin: 0;\n  padding: 0; }\n  ul.hands li.hand {\n    position: absolute;\n    transform: translate(-50%, -50%);\n    background-color: #cf0;\n    width: 50px;\n    height: 50px;\n    border-radius: 50px;\n    box-shadow: 3px 3px 10px -5px black; }\n\ndiv.calibration {\n  pointer-events: none; }\n  div.calibration div.marker {\n    position: absolute;\n    transform: translate(-50%, -50%);\n    width: 35px;\n    height: 35px;\n    border: 3px dotted #222;\n    border-radius: 50px;\n    text-align: center;\n    padding-top: 7px;\n    color: transparent; }\n    div.calibration div.marker.complete {\n      border: 2px solid #9f0;\n      background-color: transparent;\n      color: #9f0; }\n    div.calibration div.marker.current {\n      border-style: solid;\n      border-color: #0cc; }\n    div.calibration div.marker.registering {\n      background-color: #0cc; }\n\nul.heatmap {\n  pointer-events: none;\n  position: absolute;\n  left: 0px;\n  top: 0px;\n  list-style: none;\n  padding: 0px;\n  margin: 0px;\n  width: 100%;\n  height: 100%; }\n  ul.heatmap li {\n    position: absolute;\n    transform: translate(-50%, -50%);\n    width: 4.2%;\n    height: 6.3%; }\n", ""]);
 
 // exports
 
 
 /***/ }),
 /* 36 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
-  Copyright (c) 2016 Jed Watson.
-  Licensed under the MIT License (MIT), see
-  http://jedwatson.github.io/classnames
-*/
-/* global define */
-
-(function () {
-	'use strict';
-
-	var hasOwn = {}.hasOwnProperty;
-
-	function classNames () {
-		var classes = [];
-
-		for (var i = 0; i < arguments.length; i++) {
-			var arg = arguments[i];
-			if (!arg) continue;
-
-			var argType = typeof arg;
-
-			if (argType === 'string' || argType === 'number') {
-				classes.push(arg);
-			} else if (Array.isArray(arg)) {
-				classes.push(classNames.apply(null, arg));
-			} else if (argType === 'object') {
-				for (var key in arg) {
-					if (hasOwn.call(arg, key) && arg[key]) {
-						classes.push(key);
-					}
-				}
-			}
-		}
-
-		return classes.join(' ');
-	}
-
-	if (typeof module !== 'undefined' && module.exports) {
-		module.exports = classNames;
-	} else if (true) {
-		// register as 'classnames', consistent with npm package name
-		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function () {
-			return classNames;
-		}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
-				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	} else {
-		window.classNames = classNames;
-	}
-}());
-
-
-/***/ }),
-/* 37 */
 /***/ (function(module, exports) {
 
 /*
@@ -28051,10 +28002,10 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-/* 38 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var BaseConnection = module.exports = __webpack_require__(17)
+var BaseConnection = module.exports = __webpack_require__(18)
   , _ = __webpack_require__(0);
 
 
@@ -28155,11 +28106,11 @@ BrowserConnection.prototype.stopFocusLoop = function() {
 
 
 /***/ }),
-/* 39 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var WebSocket = __webpack_require__(46)
-  , BaseConnection = __webpack_require__(17)
+var WebSocket = __webpack_require__(45)
+  , BaseConnection = __webpack_require__(18)
   , _ = __webpack_require__(0);
 
 var NodeConnection = module.exports = function(opts) {
@@ -28184,18 +28135,18 @@ NodeConnection.prototype.setupSocket = function() {
 
 
 /***/ }),
-/* 40 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(process) {var Frame = __webpack_require__(12)
   , Hand = __webpack_require__(11)
-  , Pointable = __webpack_require__(5)
+  , Pointable = __webpack_require__(2)
   , Finger = __webpack_require__(10)
-  , CircularBuffer = __webpack_require__(16)
-  , Pipeline = __webpack_require__(41)
-  , EventEmitter = __webpack_require__(7).EventEmitter
+  , CircularBuffer = __webpack_require__(17)
+  , Pipeline = __webpack_require__(40)
+  , EventEmitter = __webpack_require__(5).EventEmitter
   , gestureListener = __webpack_require__(13).gestureListener
-  , Dialog = __webpack_require__(18)
+  , Dialog = __webpack_require__(19)
   , _ = __webpack_require__(0);
 
 /**
@@ -28280,7 +28231,7 @@ var Controller = module.exports = function(opts) {
   this.accumulatedGestures = [];
   this.checkVersion = opts.checkVersion;
   if (opts.connectionType === undefined) {
-    this.connectionType = (this.inBrowser() ? __webpack_require__(38) : __webpack_require__(39));
+    this.connectionType = (this.inBrowser() ? __webpack_require__(37) : __webpack_require__(38));
   } else {
     this.connectionType = opts.connectionType;
   }
@@ -28930,10 +28881,10 @@ Controller.prototype.useRegisteredPlugins = function(){
 
 _.extend(Controller.prototype, EventEmitter.prototype);
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(21)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(22)))
 
 /***/ }),
-/* 41 */
+/* 40 */
 /***/ (function(module, exports) {
 
 var Pipeline = module.exports = function (controller) {
@@ -28991,16 +28942,16 @@ Pipeline.prototype.addWrappedStep = function (type, callback) {
 };
 
 /***/ }),
-/* 42 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports.UI = {
-  Region: __webpack_require__(44),
-  Cursor: __webpack_require__(43)
+  Region: __webpack_require__(43),
+  Cursor: __webpack_require__(42)
 };
 
 /***/ }),
-/* 43 */
+/* 42 */
 /***/ (function(module, exports) {
 
 var Cursor = module.exports = function() {
@@ -29015,10 +28966,10 @@ var Cursor = module.exports = function() {
 
 
 /***/ }),
-/* 44 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var EventEmitter = __webpack_require__(7).EventEmitter
+var EventEmitter = __webpack_require__(5).EventEmitter
   , _ = __webpack_require__(0)
 
 var Region = module.exports = function(start, end) {
@@ -29107,7 +29058,7 @@ Region.prototype.mapToXY = function(position, width, height) {
 _.extend(Region.prototype, EventEmitter.prototype)
 
 /***/ }),
-/* 45 */
+/* 44 */
 /***/ (function(module, exports) {
 
 // This file is automatically updated from package.json by grunt.
@@ -29119,7 +29070,7 @@ module.exports = {
 }
 
 /***/ }),
-/* 46 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/// shim for browser packaging
@@ -29128,10 +29079,10 @@ module.exports = function() {
   return global.WebSocket || global.MozWebSocket;
 }
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(24)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(25)))
 
 /***/ }),
-/* 47 */
+/* 46 */
 /***/ (function(module, exports) {
 
 /*!
@@ -29305,7 +29256,7 @@ module.exports = function() {
 
 
 /***/ }),
-/* 48 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -29351,7 +29302,7 @@ var singleton = null;
 var	singletonCounter = 0;
 var	stylesInsertedAtTop = [];
 
-var	fixUrls = __webpack_require__(49);
+var	fixUrls = __webpack_require__(48);
 
 module.exports = function(list, options) {
 	if (typeof DEBUG !== "undefined" && DEBUG) {
@@ -29664,7 +29615,7 @@ function updateLink (link, options, obj) {
 
 
 /***/ }),
-/* 49 */
+/* 48 */
 /***/ (function(module, exports) {
 
 
@@ -29759,7 +29710,7 @@ module.exports = function (css) {
 
 
 /***/ }),
-/* 50 */
+/* 49 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -29849,7 +29800,7 @@ class Dispatcher {
 
 
 /***/ }),
-/* 51 */
+/* 50 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -30044,11 +29995,11 @@ class Rect {
 
 
 /***/ }),
-/* 52 */
+/* 51 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__geom__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__geom__ = __webpack_require__(24);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__random__ = __webpack_require__(8);
 
 
@@ -30178,7 +30129,7 @@ class Vec {
 
 
 /***/ }),
-/* 53 */
+/* 52 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -30187,7 +30138,7 @@ class Vec {
 /* unused harmony export beginsWith */
 /* unused harmony export endsWith */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__random__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__arrays__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__arrays__ = __webpack_require__(23);
 
 
 
@@ -30299,7 +30250,7 @@ function endsWith(s, test) {
 
 
 /***/ }),
-/* 54 */
+/* 53 */
 /***/ (function(module, exports) {
 
 module.exports = function(module) {

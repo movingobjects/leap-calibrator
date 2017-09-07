@@ -24,8 +24,8 @@ const CALIBRATION_STEPS         = 4,
       CALIBRATION_MAX_MOVE_DIST = 50,
       CALIBRATION_PAD_PERC      = 0.25;
 
-const HEATMAP_COLS = 30,
-      HEATMAP_ROWS = 20;
+const HEATMAP_COLS = 24,
+      HEATMAP_ROWS = 16;
 
 
 // Class
@@ -55,7 +55,8 @@ export default class App extends React.Component {
       appMinY: undefined,
       appMaxX: undefined,
       appMaxY: undefined,
-      showLeapZone: true,
+      showHeatmap: false,
+      showLeapZone: false,
       leapMinX: 0,
       leapMinY: 0,
       leapMaxX: 1,
@@ -120,6 +121,13 @@ export default class App extends React.Component {
         e.preventDefault();
         this.setState({
           fullscreen: !this.state.fullscreen
+        });
+        break;
+
+      case 'h':
+        e.preventDefault();
+        this.setState({
+          showHeatmap: !this.state.showHeatmap
         });
         break;
 
@@ -489,7 +497,6 @@ export default class App extends React.Component {
   }
 
 
-
   // React lifecycle
 
   render() {
@@ -513,6 +520,13 @@ export default class App extends React.Component {
 
       <div className={appClasses}>
 
+        {(this.state.showHeatmap && !this.state.isCalibrating) && (
+          <Heatmap
+            colCount={HEATMAP_COLS}
+            rowCount={HEATMAP_ROWS}
+            data={this.heatmap} />
+        )}
+
         {(this.state.showLeapZone && hasCalibration) && (
           <div
             className='app-zone'
@@ -525,11 +539,6 @@ export default class App extends React.Component {
             <p>App window area</p>
           </div>
         )}
-
-        <Heatmap
-          colCount={HEATMAP_COLS}
-          rowCount={HEATMAP_ROWS}
-          data={this.heatmap} />
 
         {(hands.length > 0) && (
           <HandsDisplay
@@ -545,6 +554,7 @@ export default class App extends React.Component {
         {!this.state.isCalibrating && (
           <ControlsPanel
             fullscreen={this.state.fullscreen}
+            showHeatmap={this.state.showHeatmap}
             showLeapZone={this.state.showLeapZone}
             appMinX={this.state.appMinX}
             appMinY={this.state.appMinY}
