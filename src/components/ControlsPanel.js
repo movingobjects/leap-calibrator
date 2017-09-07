@@ -52,6 +52,11 @@ export default class ControlsPanel extends React.Component {
 
   render() {
 
+      const hasCalibration = this.props.appMinX !== undefined &&
+                             this.props.appMinY !== undefined &&
+                             this.props.appMaxX !== undefined &&
+                             this.props.appMaxY !== undefined;
+
     return (
 
       <div className='controls'>
@@ -83,32 +88,34 @@ export default class ControlsPanel extends React.Component {
         <fieldset>
           <legend>App zone</legend>
 
-          <p className='area'>
-            <input
-              className='area-top'
-              type='number'
-              name='appMinY'
-              value={this.props.appMinY}
-              onChange={this.props.onControlChange} />
-            <input
-              className='area-left'
-              type='number'
-              name='appMinX'
-              value={this.props.appMinX}
-              onChange={this.props.onControlChange} />
-            <input
-              className='area-right'
-              type='number'
-              name='appMaxX'
-              value={this.props.appMaxX}
-              onChange={this.props.onControlChange} />
-            <input
-              className='area-btm'
-              type='number'
-              name='appMaxY'
-              value={this.props.appMaxY}
-              onChange={this.props.onControlChange} />
-          </p>
+          {hasCalibration && (
+            <p className='area'>
+              <input
+                className='area-top'
+                type='number'
+                name='appMinY'
+                value={this.props.appMinY}
+                onChange={this.props.onControlChange} />
+              <input
+                className='area-left'
+                type='number'
+                name='appMinX'
+                value={this.props.appMinX}
+                onChange={this.props.onControlChange} />
+              <input
+                className='area-right'
+                type='number'
+                name='appMaxX'
+                value={this.props.appMaxX}
+                onChange={this.props.onControlChange} />
+              <input
+                className='area-btm'
+                type='number'
+                name='appMaxY'
+                value={this.props.appMaxY}
+                onChange={this.props.onControlChange} />
+            </p>
+          )}
 
           <p>
             <button
@@ -118,35 +125,19 @@ export default class ControlsPanel extends React.Component {
             </button>
           </p>
 
-          <p>
-            <textarea
-              className='raw-json'
-              readOnly
-              value={this.getAppAreaJSON()} />
-          </p>
+          {hasCalibration && (
+            <p>
+              <textarea
+                className='raw-json'
+                readOnly
+                value={this.getAppAreaJSON()} />
+            </p>
+          )}
 
-          </fieldset>
+        </fieldset>
 
         <fieldset>
           <legend>Leap zone</legend>
-
-          <label>
-            <input
-              type='checkbox'
-              name='invertX'
-              checked={this.props.invertX}
-              onChange={this.props.onInvertAxisChange} />
-            <strong>[X]</strong> Invert X
-          </label>
-
-          <label>
-            <input
-              type='checkbox'
-              name='invertY'
-              checked={this.props.invertY}
-              onChange={this.props.onInvertAxisChange} />
-            <strong>[Y]</strong> Invert Y
-          </label>
 
           <p className='area'>
 

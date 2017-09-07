@@ -7,7 +7,7 @@ import * as Leap from 'leapjs';
 
 import screenfull from 'screenfull';
 
-import { maths, Rect } from 'varyd-utils';
+import { maths, Rect, Span } from 'varyd-utils';
 import LeapAgent from '../utils/LeapAgent';
 
 import ControlsPanel from './ControlsPanel';
@@ -16,11 +16,6 @@ import Calibration from './Calibration';
 
 
 // Constants
-
-const DEF_APP_MIN_X             = -1,
-      DEF_APP_MIN_Y             = -1,
-      DEF_APP_MAX_X             = 1,
-      DEF_APP_MAX_Y             = 1;
 
 const CALIBRATION_STEPS         = 4,
       CALIBRATION_HOLD_DURATION = 1,
@@ -50,13 +45,11 @@ export default class App extends React.Component {
     this.state = {
       hands: [],
       fullscreen: false,
+      appMinX: undefined,
+      appMinY: undefined,
+      appMaxX: undefined,
+      appMaxY: undefined,
       showLeapZone: true,
-      invertX: false,
-      invertY: true,
-      appMinX: DEF_APP_MIN_X,
-      appMinY: DEF_APP_MIN_Y,
-      appMaxX: DEF_APP_MAX_X,
-      appMaxY: DEF_APP_MAX_Y,
       leapMinX: 0,
       leapMinY: 0,
       leapMaxX: 1,
@@ -76,7 +69,6 @@ export default class App extends React.Component {
     this.handleWindowResize             = this.handleWindowResize.bind(this);
     this.handleControlChange            = this.handleControlChange.bind(this);
     this.handleFullScreenCheckboxChange = this.handleFullScreenCheckboxChange.bind(this);
-    this.handleInvertAxisChange         = this.handleInvertAxisChange.bind(this);
     this.handleRecalibrateClick         = this.handleRecalibrateClick.bind(this);
 
   }
@@ -99,34 +91,6 @@ export default class App extends React.Component {
   }
   initCalibration() { }
 
-  // Getters & setters
-
-  get appMinX() {
-    return (false && this.state.invertX) ? this.state.appMaxX : this.state.appMinX;
-  }
-  get appMinY() {
-    return (false && this.state.invertY) ? this.state.appMaxY : this.state.appMinY;
-  }
-  get appMaxX() {
-    return (false && this.state.invertX) ? this.state.appMinX : this.state.appMaxX;
-  }
-  get appMaxY() {
-    return (false && this.state.invertY) ? this.state.appMinY : this.state.appMaxY;
-  }
-
-  get leapMinX() {
-    return (this.state.invertX) ? this.state.leapMaxX : this.state.leapMinX;
-  }
-  get leapMinY() {
-    return (this.state.invertY) ? this.state.leapMaxY : this.state.leapMinY;
-  }
-  get leapMaxX() {
-    return (this.state.invertX) ? this.state.leapMinX : this.state.leapMaxX;
-  }
-  get leapMaxY() {
-    return (this.state.invertY) ? this.state.leapMinY : this.state.leapMaxY;
-  }
-
 
   // Event handlers
 
@@ -146,18 +110,6 @@ export default class App extends React.Component {
         });
         break;
 
-      case 'x':
-        this.setState({
-          invertX: !this.state.invertX
-        });
-        break;
-
-      case 'y':
-        this.setState({
-          invertY: !this.state.invertY
-        });
-        break;
-
     }
 
   }
@@ -173,13 +125,13 @@ export default class App extends React.Component {
 
   handleLeapFrame(e) {
 
-    if (this.state.isCalibrating) {
-      this.updateCalibration(e.hands);
-    }
-
     this.setState({
       hands: e.hands
-    })
+    });
+
+    if (this.state.isCalibrating) {
+      this.updateCalibration();
+    }
 
   }
   handleLeapZoneUpdate(e) {
@@ -212,24 +164,6 @@ export default class App extends React.Component {
     });
 
   }
-  handleInvertAxisChange(e) {
-
-    switch (e.target.name) {
-
-      case 'invertX':
-        this.setState({
-          invertX: !this.state.invertX
-        });
-        break;
-
-      case 'invertY':
-        this.setState({
-          invertY: !this.state.invertY
-        });
-        break;
-
-    }
-  }
 
   handleRecalibrateClick(e) {
 
@@ -258,16 +192,19 @@ export default class App extends React.Component {
 
   getAppAreaRect() {
 
-    const showLeapZone  = this.state.showLeapZone,
-          winW          = this.state.winW,
-          winH          = this.state.winH;
+    const spanLeapX = new Span(this.state.leapMinX, this.state.leapMaxX),
+          spanLeapY = new Span(this.state.leapMinY, this.state.leapMaxY),
+          winSpanX  = new Span(0, this.state.winW),
+          winSpanY  = new Span(0, this.state.winH);
 
-    const x = Math.round(showLeapZone ? maths.map(this.appMinX, this.leapMinX, this.leapMaxX, 0, winW) : 0),
-          y = Math.round(showLeapZone ? maths.map(this.appMinY, this.leapMinY, this.leapMaxY, 0, winH) : 0),
-          r = Math.round(showLeapZone ? maths.map(this.appMaxX, this.leapMinX, this.leapMaxX, 0, winW) : winW),
-          b = Math.round(showLeapZone ? maths.map(this.appMaxY, this.leapMinY, this.leapMaxY, 0, winH) : winH);
+    const x = spanLeapX.mapToSpan(this.state.appMinX, winSpanX),
+          y = spanLeapY.mapToSpan(this.state.appMinY, winSpanY),
+          r = spanLeapX.mapToSpan(this.state.appMaxX, winSpanX),
+          b = spanLeapY.mapToSpan(this.state.appMaxY, winSpanY),
+          w = r - x,
+          h = b - y;
 
-    return new Rect(x, y, r - x, b - y);
+    return new Rect(x, y, w, h).absolutized();
 
   }
   getHandsViewData() {
@@ -275,16 +212,16 @@ export default class App extends React.Component {
     const showLeapZone = this.state.showLeapZone;
 
     const rectLeap = new Rect(
-      this.leapMinX,
-      this.leapMinY,
-      this.leapMaxX - this.leapMinX,
-      this.leapMaxY - this.leapMinY
+      this.state.leapMinX,
+      this.state.leapMinY,
+      this.state.leapMaxX - this.state.leapMinX,
+      this.state.leapMaxY - this.state.leapMinY
     );
     const rectApp  = new Rect(
-      this.appMinX,
-      this.appMinY,
-      this.appMaxX - this.appMinX,
-      this.appMaxY - this.appMinY
+      this.state.appMinX,
+      this.state.appMinY,
+      this.state.appMaxX - this.state.appMinX,
+      this.state.appMaxY - this.state.appMinY
     );
     const rectWin  = new Rect(
       0,
@@ -345,9 +282,10 @@ export default class App extends React.Component {
 
   restartCalibration() {
 
-    const handsOn = (this.state.hands && this.state.hands.length)
+    const handsOn = (this.state.hands && this.state.hands.length > 0)
 
     this.setState({
+      showLeapZone: false,
       isCalibrating: true,
       calibrationStep: 0,
       calibrationPts: [],
@@ -370,9 +308,12 @@ export default class App extends React.Component {
     this.stepPts  = [];
 
   }
-  updateCalibration(hands = []) {
+  updateCalibration() {
+
+    const hands = this.state.hands;
 
     if (!this.state.calibrationReady) {
+
       if (!hands.length) {
         this.resetCalibrationStep();
         this.setState({
@@ -380,31 +321,41 @@ export default class App extends React.Component {
         });
       }
 
-    } else if (hands.length > 1) {
-      this.setState({
-        calibrationReady: false,
-        calibrationRegistering: false
-      });
+    } else {
 
-    } else if (hands[0]) {
+      if (hands.length > 1) {
+        this.setState({
+          calibrationReady: false,
+          calibrationRegistering: false
+        });
 
-      this.setState({
-        calibrationRegistering: true
-      })
+      } else if (hands[0]) {
 
-      if (this.timeoutCalibration === undefined) {
-        this.timeoutCalibration = setTimeout(
-          this.handleCalibrationTimeout.bind(this),
-          CALIBRATION_HOLD_DURATION * 1000
-        );
+        this.setState({
+          calibrationRegistering: true
+        })
+
+        if (this.timeoutCalibration === undefined) {
+          this.timeoutCalibration = setTimeout(
+            this.handleCalibrationTimeout.bind(this),
+            CALIBRATION_HOLD_DURATION * 1000
+          );
+        }
+
+        this.stepPts.push({
+          x: hands[0].x,
+          y: hands[0].y
+        });
+
+        this.checkStepPts();
+
+      } else {
+        this.setState({
+          calibrationRegistering: false
+        });
+        this.resetCalibrationStep();
+
       }
-
-      this.stepPts.push({
-        x: hands[0].x,
-        y: hands[0].y
-      });
-
-      this.checkStepPts();
 
     }
 
@@ -485,22 +436,27 @@ export default class App extends React.Component {
 
   render() {
 
-    const rectApp   = this.getAppAreaRect(),
-          hands     = this.getHandsViewData();
+    const hasCalibration = this.state.appMinX !== undefined &&
+                           this.state.appMinY !== undefined &&
+                           this.state.appMaxX !== undefined &&
+                           this.state.appMaxY !== undefined;
 
-    const promptMsg = this.getPrompt();
+    const rectApp        = hasCalibration ? this.getAppAreaRect() : undefined,
+          hands          = this.getHandsViewData();
+
+    const promptMsg      = this.getPrompt();
 
     return (
 
       <div className='app'>
 
-        {(this.state.showLeapZone) && (
+        {(this.state.showLeapZone && hasCalibration) && (
           <div
             className='app-zone'
             style={{
-              left: rectApp.x + 'px',
-              top: rectApp.y + 'px',
-              width: rectApp.w + 'px',
+              left:   rectApp.x + 'px',
+              top:    rectApp.y + 'px',
+              width:  rectApp.w + 'px',
               height: rectApp.h + 'px'
             }}>
             <p>App window area</p>
@@ -522,18 +478,15 @@ export default class App extends React.Component {
           <ControlsPanel
             fullscreen={this.state.fullscreen}
             showLeapZone={this.state.showLeapZone}
-            invertX={this.state.invertX}
-            invertY={this.state.invertY}
-            appMinX={this.appMinX}
-            appMinY={this.appMinY}
-            appMaxX={this.appMaxX}
-            appMaxY={this.appMaxY}
-            leapMinX={this.leapMinX}
-            leapMinY={this.leapMinY}
-            leapMaxX={this.leapMaxX}
-            leapMaxY={this.leapMaxY}
+            appMinX={this.state.appMinX}
+            appMinY={this.state.appMinY}
+            appMaxX={this.state.appMaxX}
+            appMaxY={this.state.appMaxY}
+            leapMinX={this.state.leapMinX}
+            leapMinY={this.state.leapMinY}
+            leapMaxX={this.state.leapMaxX}
+            leapMaxY={this.state.leapMaxY}
             onControlChange={this.handleControlChange}
-            onInvertAxisChange={this.handleInvertAxisChange}
             onFullScreenCheckboxChange={this.handleFullScreenCheckboxChange}
             onRecalibrateClick={this.handleRecalibrateClick} />
         )}
