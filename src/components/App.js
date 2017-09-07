@@ -6,6 +6,7 @@ import * as React from 'react';
 import * as Leap from 'leapjs';
 
 import screenfull from 'screenfull';
+import classNames from 'classnames';
 
 import { maths, Rect, Span } from 'varyd-utils';
 import LeapAgent from '../utils/LeapAgent';
@@ -90,6 +91,12 @@ export default class App extends React.Component {
 
   }
   initCalibration() { }
+
+  // Getters & setters
+
+  get handsOn() {
+    return (this.state.hands !== undefined) && (this.state.hands.length > 0);
+  }
 
 
   // Event handlers
@@ -282,14 +289,12 @@ export default class App extends React.Component {
 
   restartCalibration() {
 
-    const handsOn = (this.state.hands && this.state.hands.length > 0)
-
     this.setState({
       showLeapZone: false,
       isCalibrating: true,
       calibrationStep: 0,
       calibrationPts: [],
-      calibrationReady: !handsOn,
+      calibrationReady: !this.handsOn,
       calibrationRegistering: false
     })
 
@@ -446,9 +451,16 @@ export default class App extends React.Component {
 
     const promptMsg      = this.getPrompt();
 
+    const appClasses     = classNames({
+      "app": true,
+      "hands-on": this.handsOn
+    })
+
     return (
 
-      <div className='app'>
+      <div className={appClasses}>
+
+        <div className='frame' />
 
         {(this.state.showLeapZone && hasCalibration) && (
           <div
