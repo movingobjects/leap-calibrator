@@ -3,7 +3,7 @@
 
 import * as _ from 'lodash';
 import { arrays, maths, random } from 'varyd-utils';
-import { Dispatcher } from 'varyd-utils';
+import { Dispatcher, Range } from 'varyd-utils';
 
 import * as Leap from 'leapjs';
 
@@ -17,72 +17,90 @@ export default class LeapAgent extends Dispatcher {
 
   // Constructor
 
-  constructor() {
+  constructor(options) {
 
     super();
 
-    this.leap = Leap.loop({}, (f) => {
-      this.handleLeapFrame(f);
-    });
+    // Bindings
+    this.handleLeapFrame = this.handleLeapFrame.bind(this);
+
+    // Init boundaries
+    this.rangeX = new Range(options.xMin, options.xMax);
+    this.rangeY = new Range(options.yMin, options.yMax);
+    this.rangeZ = new Range(options.zMin, options.zMax);
+
+    this.leapRangeX = this.rangeX.clone();
+    this.leapRangeY = this.rangeY.clone();
+    this.leapRangeZ = this.rangeZ.clone();
+
+    // Init Leap options
+    this.leapOptions = { };
+
+    if (options.host) this.leapOptions.host = options.host;
+    if (options.port) this.leapOptions.port = options.port;
+
+    // Enable
+    if (options.enable === undefined || options.enable != false) {
+      this.enable()
+    }
 
   }
 
 
-  // Getters & setters
+  // Get/set
 
   get xMin() {
-    return this._xMin;
+    return this.rangeX.min;
   }
   get xMax() {
-    return this._xMax;
+    return this.rangeX.max;
   }
+  get yMin() {
+    return this.rangeY.min;
+  }
+  get yMax() {
+    return this.rangeY.max;
+  }
+  get zMin() {
+    return this.rangeZ.min;
+  }
+  get zMax() {
+    return this.rangeZ.max;
+  }
+
   set xMin(val) {
-    if (val !== this._xMin) {
-      this._xMin  = val;
+    if (val < this.rangeX.min) {
+      this.rangeX.min = val;
       super.dispatch('zoneUpdate');
     }
   }
   set xMax(val) {
-    if (val !== this._xMax) {
-      this._xMax  = val;
+    if (val > this.rangeX.max) {
+      this.rangeX.max = val;
       super.dispatch('zoneUpdate');
     }
   }
-
-  get yMin() {
-    return this._yMin;
-  }
-  get yMax() {
-    return this._yMax;
-  }
   set yMin(val) {
-    if (val !== this._yMin) {
-      this._yMin  = val;
+    if (val < this.rangeY.min) {
+      this.rangeY.min = val;
       super.dispatch('zoneUpdate');
     }
   }
   set yMax(val) {
-    if (val !== this._yMax) {
-      this._yMax  = val;
+    if (val > this.rangeY.max) {
+      this.rangeY.max = val;
       super.dispatch('zoneUpdate');
     }
   }
-
-  get zMin() {
-    return this._zMin;
-  }
-  get zMax() {
-    return this._zMax;
-  }
   set zMin(val) {
-    if (val !== this._zMin) {
-      this._zMin  = val;
+    if (val < this.rangeZ.min) {
+      this.rangeZ.min = val;
       super.dispatch('zoneUpdate');
     }
   }
   set zMax(val) {
-    if (val !== this._zMax) {
-      this._zMax  = val;
+    if (val > this.rangeZ.max) {
+      this.rangeZ.max = val;
       super.dispatch('zoneUpdate');
     }
   }
@@ -92,28 +110,22 @@ export default class LeapAgent extends Dispatcher {
 
   handleLeapFrame(frame) {
 
-    const framePrev      = this.leap.frame(1);
+    const framePrev = this.leap.frame(1);
 
     if (!frame.hands.length && !framePrev.hands.length) {
       // No need to send events if no hands present
       return;
     }
 
-    const hands   = frame.hands.map((hand) => {
+    const hands = frame.hands.map((hand) => {
 
-      let x  = hand.indexFinger.distal.nextJoint[0],
-          y  = hand.indexFinger.distal.nextJoint[1],
-          z  = hand.indexFinger.distal.nextJoint[2];
+      let x = hand.indexFinger.distal.nextJoint[0],
+          y = hand.indexFinger.distal.nextJoint[1],
+          z = hand.indexFinger.distal.nextJoint[2];
 
-      if (isNaN(x) || isNaN(y) || isNaN(z)) {
-        return undefined;
-      }
-
-      this.updateZone(x, y, z);
-
-      let percX = maths.norm(x, this.xMin, this.xMax),
-          percY = maths.norm(y, this.yMin, this.yMax),
-          percZ = maths.norm(z, this.zMin, this.zMax);
+      this.leapRangeX.envelop(x);
+      this.leapRangeY.envelop(y);
+      this.leapRangeZ.envelop(z);
 
       return {
 
@@ -123,15 +135,19 @@ export default class LeapAgent extends Dispatcher {
         y: y,
         z: z,
 
-        percX: percX,
-        percY: percY,
-        percZ: percZ,
+        percX: this.rangeX.norm(x),
+        percY: this.rangeY.norm(y),
+        percZ: this.rangeZ.norm(z),
 
-        screenX: percX * screen.width,
-        screenY: percY * screen.height,
+        leapPercX: this.leapRangeX.norm(x),
+        leapPercY: this.leapRangeY.norm(y),
+        leapPercZ: this.leapRangeZ.norm(z),
 
-        windowX: (percX * screen.width ) - window.screenX,
-        windowY: (percY * screen.height) - window.screenY
+        screenX: this.rangeX.mapTo(x, 0, screen.width),
+        screenY: this.rangeY.mapTo(y, 0, screen.height),
+
+        windowX: this.rangeX.mapTo(x, 0, screen.width ) - window.screenX,
+        windowY: this.rangeY.mapTo(y, 0, screen.height) - window.screenY
 
       };
 
@@ -148,22 +164,11 @@ export default class LeapAgent extends Dispatcher {
 
   // Methods
 
-  updateZone(x, y, z) {
-
-    if (this.xMin === undefined) this.xMin = x;
-    if (this.xMax === undefined) this.xMax = x;
-    if (this.yMin === undefined) this.yMin = y;
-    if (this.yMax === undefined) this.yMax = y;
-    if (this.zMin === undefined) this.zMin = z;
-    if (this.zMax === undefined) this.zMax = z;
-
-    if (x < this.xMin) this.xMin = x;
-    if (x > this.xMax) this.xMax = x;
-    if (y < this.yMin) this.yMin = y;
-    if (y > this.yMax) this.yMax = y;
-    if (z < this.zMin) this.zMin = z;
-    if (z > this.zMax) this.zMax = z;
-
+  enable() {
+    this.leap = Leap.loop(this.leapOptions, this.handleLeapFrame);
+  }
+  disable() {
+    this.leap = Leap.loop({}, null);
   }
 
 

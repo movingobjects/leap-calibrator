@@ -1,0 +1,37 @@
+{
+
+  "view": {
+
+    "enableFullscreen": true,
+    "enableHeatmap": false,
+
+    "heatmap": {
+      "cols": 24,
+      "rows": 16
+    }
+
+  },
+
+  "calibration": {
+    "holdDuration": 1,
+    "maxMoveDist": 50,
+    "padPerc": 0.25
+  },
+
+  "leap": {
+
+    "host": "127.0.0.1",
+    "port": 6437,
+
+    "defaultCalibration": {
+      "xMin": -300,
+      "xMax": 280,
+      "yMin": 355,
+      "yMax": 75,
+      "zMin": -1,
+      "zMax": -1
+    }
+
+  }
+
+}

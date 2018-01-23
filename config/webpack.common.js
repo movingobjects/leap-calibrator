@@ -58,6 +58,9 @@ module.exports = {
   },
 
   plugins: [
+    new CopyWebpackPlugin([
+      { from: 'app/src/config.default.json', to: '.' },
+    ]),
     new HtmlWebpackPlugin({
       filename: 'index.html',
       template: 'app/src/index.html'

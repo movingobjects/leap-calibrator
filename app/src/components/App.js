@@ -3,12 +3,15 @@
 
 import * as _ from 'lodash';
 import * as React from 'react';
+import * as mkdirp from 'mkdirp';
+import * as rimraf from 'rimraf';
+import { remote } from 'electron';
 import * as Leap from 'leapjs';
 
 import screenfull from 'screenfull';
 import classNames from 'classnames';
 
-import { maths, random, Rect, Span } from 'varyd-utils';
+import { maths, net, random, Rect, Span } from 'varyd-utils';
 import LeapAgent from '../utils/LeapAgent';
 
 import Heatmap from './Heatmap';
@@ -19,13 +22,14 @@ import Calibration from './Calibration';
 
 // Constants
 
-const CALIBRATION_STEPS         = 4,
-      CALIBRATION_HOLD_DURATION = 1,
-      CALIBRATION_MAX_MOVE_DIST = 50,
-      CALIBRATION_PAD_PERC      = 0.25;
+const electronFs  = remote.require('fs'),
+      electronApp = remote.app,
+      electronWin = remote.getCurrentWindow();
 
-const HEATMAP_COLS = 24,
-      HEATMAP_ROWS = 16;
+const CALIBRATION_STEPS       = 4;
+
+const FILENAME_CONFIG         = 'config.json',
+      FILENAME_CONFIG_DEFAULT = 'config.default.json';
 
 
 // Class
@@ -38,53 +42,101 @@ export default class App extends React.Component {
 
     super();
 
-    this.initState();
     this.initBindings();
-    this.initLeap();
+    this.initDocsFolder();
+    this.initState();
     this.initFullscreen();
     this.initHeatmap()
+
+    this.initConfig();
 
   }
 
   initState() {
 
     this.state = {
+
+      ready: false,
+
       hands: [],
-      fullscreen: false,
+
+      fullscreen: true,
+
       appMinX: undefined,
       appMinY: undefined,
       appMaxX: undefined,
       appMaxY: undefined,
+
       showHeatmap: false,
       showLeapZone: false,
+
       leapMinX: 0,
       leapMinY: 0,
       leapMaxX: 1,
       leapMaxY: 1,
+
       isCalibrating: false,
       calibrationStep: -1,
       calibrationReady: false,
       calibrationRegistering: false,
+
       winW: window.innerWidth,
       winH: window.innerHeight,
+
       promptMsg: ''
+
     }
   }
   initBindings() {
 
-    this.handleKeyDown                  = this.handleKeyDown.bind(this);
-    this.handleWindowResize             = this.handleWindowResize.bind(this);
+    this.handleCalibrationTimeout       = this.handleCalibrationTimeout.bind(this);
+    this.handleConfigReady              = this.handleConfigReady.bind(this);
     this.handleControlChange            = this.handleControlChange.bind(this);
     this.handleFullScreenCheckboxChange = this.handleFullScreenCheckboxChange.bind(this);
+    this.handleKeyDown                  = this.handleKeyDown.bind(this);
+    this.handleLeapFrame                = this.handleLeapFrame.bind(this);
+    this.handleLeapZoneUpdate           = this.handleLeapZoneUpdate.bind(this);
     this.handleRecalibrateClick         = this.handleRecalibrateClick.bind(this);
+    this.handleWindowResize             = this.handleWindowResize.bind(this);
 
   }
-  initLeap() {
+  initDocsFolder() {
 
-    this.leap = new LeapAgent();
+    const userDocs = electronApp.getPath('documents').split('\\').join('/'),
+          appName  = electronApp.getName(),
+          path     = `${userDocs}/${appName}/`;
 
-    this.leap.addListener('leapFrame', this.handleLeapFrame.bind(this));
-    this.leap.addListener('zoneUpdate', this.handleLeapZoneUpdate.bind(this));
+    mkdirp.sync(path);
+
+    App.docsPath = path;
+    App.fileExists = (filePath) => {
+      return electronFs.existsSync(App.docsPath + filePath)
+    }
+    App.pathTo = (filePath) => {
+      return App.docsPath + filePath;
+    }
+    App.writeFile = (filePath, data, onSuccess) => {
+      const path = App.docsPath + filePath;
+      electronFs.writeFile(path, data, { encoding: 'utf-8' }, (error) => {
+        if (error) {
+          console.log(`Problem writing file ${path}: ${error.message}`);
+          return;
+        }
+        if (onSuccess) {
+          onSuccess();
+        }
+      });
+    }
+    App.loadFile = (filePath, onSuccess, onError = console.log, errorMsg = '') => {
+      const path = App.docsPath + filePath;
+      electronFs.readFile(path, { encoding: 'utf-8' }, (error, data) => {
+        if (error) {
+          onError(error.message, errorMsg)
+          return;
+        }
+        onSuccess(data);
+      });
+    }
 
   }
   initFullscreen() {
@@ -98,11 +150,29 @@ export default class App extends React.Component {
   }
   initHeatmap() {
 
-    this.history  = [];
+    this.history = [];
     this.heatmap = [];
 
   }
 
+  initConfig() {
+
+    net.xhrFetch(FILENAME_CONFIG_DEFAULT)
+      .then((data) => data.text())
+      .then((data) => {
+        App.writeFile(FILENAME_CONFIG_DEFAULT, data);
+        if (!App.fileExists(FILENAME_CONFIG)) {
+          App.writeFile(FILENAME_CONFIG, data, this.handleConfigReady);
+        } else {
+          App.loadFile(FILENAME_CONFIG, this.handleConfigReady);
+        }
+      })
+      .catch((error) => {
+        console.log(`Problem loading default 'Config' file.`);
+        console.log(error);
+      });
+
+  }
 
   // Getters & setters
 
@@ -112,6 +182,18 @@ export default class App extends React.Component {
 
 
   // Event handlers
+
+  handleConfigReady(data) {
+
+    App.config = JSON.parse(data);
+
+    this.initLeap();
+
+    this.setState({
+      ready: true
+    });
+
+  }
 
   handleKeyDown(e) {
 
@@ -217,6 +299,30 @@ export default class App extends React.Component {
 
 
   // Methods
+
+
+  initLeap() {
+
+    const config = App.config.leap,
+          calib  = config.defaultCalibration;
+
+    this.leap    = new LeapAgent({
+      enable: true,
+      host: config.host,
+      port: config.port,
+      xMin: calib.xMin,
+      xMax: calib.xMax,
+      yMin: calib.yMin,
+      yMax: calib.yMax,
+      zMin: calib.zMin,
+      zMax: calib.zMax
+    });
+
+    this.leap.addListener('leapFrame', this.handleLeapFrame.bind(this));
+    this.leap.addListener('zoneUpdate', this.handleLeapZoneUpdate.bind(this));
+
+  }
+
 
   requestFullscreen(el) {
     return el.requestFullscreen || el.msRequestFullscreen || el.mozRequestFullScreen || el.webkitRequestFullscreen;
@@ -358,7 +464,7 @@ export default class App extends React.Component {
         if (this.timeoutCalibration === undefined) {
           this.timeoutCalibration = setTimeout(
             this.handleCalibrationTimeout.bind(this),
-            CALIBRATION_HOLD_DURATION * 1000
+            App.config.calibration.holdDuration * 1000
           );
         }
 
@@ -394,7 +500,7 @@ export default class App extends React.Component {
     let distX = maxX - minX,
         distY = maxY - minY;
 
-    if (distX > CALIBRATION_MAX_MOVE_DIST || distY > CALIBRATION_MAX_MOVE_DIST) {
+    if (distX > App.config.calibration.maxMoveDist || distY > App.config.calibration.maxMoveDist) {
       this.resetCalibrationStep();
     }
 
@@ -416,13 +522,13 @@ export default class App extends React.Component {
         avgT  = maths.lerp(this.savedPts[0].y, this.savedPts[1].y, 0.5),
         avgB  = maths.lerp(this.savedPts[2].y, this.savedPts[3].y, 0.5);
 
-    const padW  = (this.state.winW * CALIBRATION_PAD_PERC),
-          padH  = (this.state.winH * CALIBRATION_PAD_PERC);
+    const padW  = (this.state.winW * App.config.calibration.padPerc),
+          padH  = (this.state.winH * App.config.calibration.padPerc);
 
-    let areaW = (avgR - avgL) / (1 - (2 * CALIBRATION_PAD_PERC)),
-        areaH = (avgB - avgT) / (1 - (2 * CALIBRATION_PAD_PERC)),
-        minX  = avgL - (areaW * CALIBRATION_PAD_PERC),
-        minY  = avgT - (areaH * CALIBRATION_PAD_PERC),
+    let areaW = (avgR - avgL) / (1 - (2 * App.config.calibration.padPerc)),
+        areaH = (avgB - avgT) / (1 - (2 * App.config.calibration.padPerc)),
+        minX  = avgL - (areaW * App.config.calibration.padPerc),
+        minY  = avgT - (areaH * App.config.calibration.padPerc),
         maxX  = minX + areaW,
         maxY  = minY + areaH;
 
@@ -478,9 +584,9 @@ export default class App extends React.Component {
 
     this.history.forEach((hand) => {
 
-      let col   = Math.floor(normRect.normX(hand.x) * HEATMAP_COLS),
-          row   = Math.floor(normRect.normY(hand.y) * HEATMAP_ROWS),
-          index = (row * HEATMAP_COLS) + col;
+      let col   = Math.floor(normRect.normX(hand.x) * App.config.view.heatmap.cols),
+          row   = Math.floor(normRect.normY(hand.y) * App.config.view.heatmap.rows),
+          index = (row * App.config.view.heatmap.cols) + col;
 
       if (!this.heatmap[index]) {
         this.heatmap[index] = [ hand.confidence ];
@@ -522,8 +628,8 @@ export default class App extends React.Component {
 
         {(this.state.showHeatmap && !this.state.isCalibrating) && (
           <Heatmap
-            colCount={HEATMAP_COLS}
-            rowCount={HEATMAP_ROWS}
+            colCount={App.config.view.heatmap.cols}
+            rowCount={App.config.view.heatmap.rows}
             data={this.heatmap} />
         )}
 
@@ -571,7 +677,7 @@ export default class App extends React.Component {
 
         {this.state.isCalibrating && (
           <Calibration
-            padPerc={CALIBRATION_PAD_PERC}
+            padPerc={App.config.calibration.padPerc}
             step={this.state.calibrationStep}
             ready={this.state.calibrationReady}
             registering={this.state.calibrationRegistering}
