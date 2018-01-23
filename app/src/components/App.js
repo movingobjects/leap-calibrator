@@ -8,10 +8,9 @@ import * as rimraf from 'rimraf';
 import { remote } from 'electron';
 import * as Leap from 'leapjs';
 
-import screenfull from 'screenfull';
 import classNames from 'classnames';
 
-import { maths, net, random, Rect, Span } from 'varyd-utils';
+import { maths, net, random, Rect, Range } from 'varyd-utils';
 import LeapAgent from '../utils/LeapAgent';
 
 import Heatmap from './Heatmap';
@@ -45,7 +44,6 @@ export default class App extends React.Component {
     this.initBindings();
     this.initDocsFolder();
     this.initState();
-    this.initFullscreen();
     this.initHeatmap()
 
     this.initConfig();
@@ -60,7 +58,7 @@ export default class App extends React.Component {
 
       hands: [],
 
-      fullscreen: true,
+      fullscreen: electronWin.isFullScreen(),
 
       appMinX: undefined,
       appMinY: undefined,
@@ -68,12 +66,6 @@ export default class App extends React.Component {
       appMaxY: undefined,
 
       showHeatmap: false,
-      showLeapZone: false,
-
-      leapMinX: 0,
-      leapMinY: 0,
-      leapMaxX: 1,
-      leapMaxY: 1,
 
       isCalibrating: false,
       calibrationStep: -1,
@@ -95,7 +87,6 @@ export default class App extends React.Component {
     this.handleFullScreenCheckboxChange = this.handleFullScreenCheckboxChange.bind(this);
     this.handleKeyDown                  = this.handleKeyDown.bind(this);
     this.handleLeapFrame                = this.handleLeapFrame.bind(this);
-    this.handleLeapZoneUpdate           = this.handleLeapZoneUpdate.bind(this);
     this.handleRecalibrateClick         = this.handleRecalibrateClick.bind(this);
     this.handleWindowResize             = this.handleWindowResize.bind(this);
 
@@ -139,15 +130,6 @@ export default class App extends React.Component {
     }
 
   }
-  initFullscreen() {
-
-    if (screenfull.enabled) {
-      screenfull.on('change', () => {
-        this.forceUpdate();
-      });
-    }
-
-  }
   initHeatmap() {
 
     this.history = [];
@@ -174,7 +156,8 @@ export default class App extends React.Component {
 
   }
 
-  // Getters & setters
+
+  // Get & set
 
   get handsOn() {
     return (this.state.hands !== undefined) && (this.state.hands.length > 0);
@@ -213,13 +196,6 @@ export default class App extends React.Component {
         });
         break;
 
-      case 'l':
-        e.preventDefault();
-        this.setState({
-          showLeapZone: !this.state.showLeapZone
-        });
-        break;
-
     }
 
   }
@@ -248,16 +224,6 @@ export default class App extends React.Component {
     }
 
   }
-  handleLeapZoneUpdate(e) {
-
-    this.setState({
-      leapMinX: Math.round(this.leap.xMin),
-      leapMinY: Math.round(this.leap.yMin),
-      leapMaxX: Math.round(this.leap.xMax),
-      leapMaxY: Math.round(this.leap.yMax)
-    });
-
-  }
 
   handleControlChange(e) {
 
@@ -271,10 +237,10 @@ export default class App extends React.Component {
   }
   handleFullScreenCheckboxChange(e) {
 
-    if (!screenfull.enabled) return;
+    const goFull = e.target.checked;
 
     this.setState({
-      fullscreen: e.target.checked
+      fullscreen: goFull
     });
 
   }
@@ -300,7 +266,6 @@ export default class App extends React.Component {
 
   // Methods
 
-
   initLeap() {
 
     const config = App.config.leap,
@@ -319,26 +284,18 @@ export default class App extends React.Component {
     });
 
     this.leap.addListener('leapFrame', this.handleLeapFrame.bind(this));
-    this.leap.addListener('zoneUpdate', this.handleLeapZoneUpdate.bind(this));
 
-  }
-
-
-  requestFullscreen(el) {
-    return el.requestFullscreen || el.msRequestFullscreen || el.mozRequestFullScreen || el.webkitRequestFullscreen;
   }
 
   getAppAreaRect() {
 
-    const spanLeapX = new Span(this.state.leapMinX, this.state.leapMaxX),
-          spanLeapY = new Span(this.state.leapMinY, this.state.leapMaxY),
-          winSpanX  = new Span(0, this.state.winW),
-          winSpanY  = new Span(0, this.state.winH);
+    const winRangeX = new Range(0, this.state.winW),
+          winRangeY = new Range(0, this.state.winH);
 
-    const x = spanLeapX.mapToSpan(this.state.appMinX, winSpanX),
-          y = spanLeapY.mapToSpan(this.state.appMinY, winSpanY),
-          r = spanLeapX.mapToSpan(this.state.appMaxX, winSpanX),
-          b = spanLeapY.mapToSpan(this.state.appMaxY, winSpanY),
+    const x = this.leap.leapRangeX.mapToRange(this.state.appMinX, winRangeX),
+          y = this.leap.leapRangeY.mapToRange(this.state.appMinY, winRangeY),
+          r = this.leap.leapRangeX.mapToRange(this.state.appMaxX, winRangeX),
+          b = this.leap.leapRangeY.mapToRange(this.state.appMaxY, winRangeY),
           w = r - x,
           h = b - y;
 
@@ -347,21 +304,12 @@ export default class App extends React.Component {
   }
   getHandsViewData() {
 
-    const rectLeap = new Rect(
-      this.state.leapMinX,
-      this.state.leapMinY,
-      this.state.leapMaxX - this.state.leapMinX,
-      this.state.leapMaxY - this.state.leapMinY
-    );
-
     const rectApp  = new Rect(
       this.state.appMinX,
       this.state.appMinY,
       this.state.appMaxX - this.state.appMinX,
       this.state.appMaxY - this.state.appMinY
     );
-
-    const normRect    = this.state.showLeapZone ? rectLeap : rectApp;
 
     const rectWin  = new Rect(
       0,
@@ -375,8 +323,8 @@ export default class App extends React.Component {
     this.state.hands.forEach((hand, i) => {
 
       let hue   = maths.lerp(0, 120, hand.confidence),
-          hx    = rectWin.lerpX(normRect.normX(hand.x)),
-          hy    = rectWin.lerpY(normRect.normY(hand.y));
+          hx    = rectWin.lerpX(rectApp.normX(hand.x)),
+          hy    = rectWin.lerpY(rectApp.normY(hand.y));
 
       let anyBadVals  = isNaN(hue) || isNaN(hx) || isNaN(hy);
 
@@ -411,7 +359,6 @@ export default class App extends React.Component {
   restartCalibration() {
 
     this.setState({
-      showLeapZone: false,
       isCalibrating: true,
       calibrationStep: 0,
       calibrationPts: [],
@@ -538,8 +485,7 @@ export default class App extends React.Component {
       appMaxX: maths.roundTo(maxX, 1),
       appMaxY: maths.roundTo(maxY, 1),
       calibrationStep: CALIBRATION_STEPS,
-      isCalibrating: false,
-      showLeapZone: false
+      isCalibrating: false
     });
 
   }
@@ -561,19 +507,12 @@ export default class App extends React.Component {
 
     const MAX_HISTORY = 10000;
 
-    const rectLeap    = new Rect(
-      this.state.leapMinX,
-      this.state.leapMinY,
-      this.state.leapMaxX - this.state.leapMinX,
-      this.state.leapMaxY - this.state.leapMinY
-    );
     const rectApp     = new Rect(
       this.state.appMinX,
       this.state.appMinY,
       this.state.appMaxX - this.state.appMinX,
       this.state.appMaxY - this.state.appMinY
     );
-    const normRect    = this.state.showLeapZone ? rectLeap : rectApp;
 
     this.heatmap      = [];
     this.history      = this.history.concat(this.state.hands);
@@ -584,8 +523,8 @@ export default class App extends React.Component {
 
     this.history.forEach((hand) => {
 
-      let col   = Math.floor(normRect.normX(hand.x) * App.config.view.heatmap.cols),
-          row   = Math.floor(normRect.normY(hand.y) * App.config.view.heatmap.rows),
+      let col   = Math.floor(rectApp.normX(hand.x) * App.config.view.heatmap.cols),
+          row   = Math.floor(rectApp.normY(hand.y) * App.config.view.heatmap.rows),
           index = (row * App.config.view.heatmap.cols) + col;
 
       if (!this.heatmap[index]) {
@@ -603,9 +542,13 @@ export default class App extends React.Component {
   }
 
 
-  // React lifecycle
+  // React
 
   render() {
+
+    if (!this.state.ready) {
+      return null;
+    }
 
     const hasCalibration = this.state.appMinX !== undefined &&
                            this.state.appMinY !== undefined &&
@@ -633,19 +576,6 @@ export default class App extends React.Component {
             data={this.heatmap} />
         )}
 
-        {(this.state.showLeapZone && hasCalibration) && (
-          <div
-            className='app-zone'
-            style={{
-              left:   rectApp.x + 'px',
-              top:    rectApp.y + 'px',
-              width:  rectApp.w + 'px',
-              height: rectApp.h + 'px'
-            }}>
-            <p>App window area</p>
-          </div>
-        )}
-
         {(hands.length > 0) && (
           <HandsDisplay
             hands={hands} />
@@ -661,15 +591,10 @@ export default class App extends React.Component {
           <ControlsPanel
             fullscreen={this.state.fullscreen}
             showHeatmap={this.state.showHeatmap}
-            showLeapZone={this.state.showLeapZone}
             appMinX={this.state.appMinX}
             appMinY={this.state.appMinY}
             appMaxX={this.state.appMaxX}
             appMaxY={this.state.appMaxY}
-            leapMinX={this.state.leapMinX}
-            leapMinY={this.state.leapMinY}
-            leapMaxX={this.state.leapMaxX}
-            leapMaxY={this.state.leapMaxY}
             onControlChange={this.handleControlChange}
             onFullScreenCheckboxChange={this.handleFullScreenCheckboxChange}
             onRecalibrateClick={this.handleRecalibrateClick} />
@@ -693,19 +618,14 @@ export default class App extends React.Component {
 
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps, prevState) {
 
-    if (this.state.fullscreen) {
-      if (!screenfull.isFullscreen) {
-        screenfull.request(document.body);
-      }
-    } else {
-      if (screenfull.isFullscreen) {
-        screenfull.exit();
-      }
+    if (prevState.fullscreen != this.state.fullscreen) {
+      electronWin.setFullScreen(this.state.fullscreen);
     }
 
   }
+
   componentDidMount() {
 
     window.addEventListener('keydown', this.handleKeyDown);

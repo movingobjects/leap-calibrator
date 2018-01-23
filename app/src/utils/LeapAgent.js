@@ -69,40 +69,22 @@ export default class LeapAgent extends Dispatcher {
   }
 
   set xMin(val) {
-    if (val < this.rangeX.min) {
-      this.rangeX.min = val;
-      super.dispatch('zoneUpdate');
-    }
+    this.rangeX.min = val;
   }
   set xMax(val) {
-    if (val > this.rangeX.max) {
-      this.rangeX.max = val;
-      super.dispatch('zoneUpdate');
-    }
+    this.rangeX.max = val;
   }
   set yMin(val) {
-    if (val < this.rangeY.min) {
-      this.rangeY.min = val;
-      super.dispatch('zoneUpdate');
-    }
+    this.rangeY.min = val;
   }
   set yMax(val) {
-    if (val > this.rangeY.max) {
-      this.rangeY.max = val;
-      super.dispatch('zoneUpdate');
-    }
+    this.rangeY.max = val;
   }
   set zMin(val) {
-    if (val < this.rangeZ.min) {
-      this.rangeZ.min = val;
-      super.dispatch('zoneUpdate');
-    }
+    this.rangeZ.min = val;
   }
   set zMax(val) {
-    if (val > this.rangeZ.max) {
-      this.rangeZ.max = val;
-      super.dispatch('zoneUpdate');
-    }
+    this.rangeZ.max = val;
   }
 
 

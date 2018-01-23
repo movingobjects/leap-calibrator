@@ -37,7 +37,7 @@ export default class HandsDisplay extends React.Component {
   // Methods
 
 
-  // React lifecycle
+  // React
 
   render() {
 

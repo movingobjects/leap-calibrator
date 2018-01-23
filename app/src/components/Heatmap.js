@@ -45,7 +45,7 @@ export default class Heatmap extends React.Component {
     return Math.round(((row + 0.5) / this.props.rowCount) * window.innerHeight);
   }
 
-  // React lifecycle
+  // React
 
   render() {
 

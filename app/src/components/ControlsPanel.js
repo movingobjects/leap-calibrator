@@ -50,7 +50,7 @@ export default class ControlsPanel extends React.Component {
   }
 
 
-  // React lifecycle
+  // React
 
   render() {
 
@@ -84,17 +84,6 @@ export default class ControlsPanel extends React.Component {
               onChange={this.props.onControlChange} />
             <strong>[H]</strong> Show confidence heat map
           </label>
-
-          <br />
-
-          {/*}<label>
-            <input
-              type='checkbox'
-              name='showLeapZone'
-              checked={this.props.showLeapZone}
-              onChange={this.props.onControlChange} />
-            <strong>[L]</strong> Show full leap area
-          </label>*/}
 
         </fieldset>
 
@@ -146,39 +135,6 @@ export default class ControlsPanel extends React.Component {
                 value={this.getAppAreaJSON()} />
             </p>
           )}
-
-        </fieldset>
-
-        <fieldset>
-          <legend>Leap zone</legend>
-
-          <p className='area'>
-
-            <input
-              className='area-top'
-              type='text'
-              name='leapMinY'
-              value={this.props.leapMinY}
-              readOnly />
-            <input
-              className='area-left'
-              type='text'
-              name='leapMinX'
-              value={this.props.leapMinX}
-              readOnly />
-            <input
-              className='area-right'
-              type='text'
-              name='leapMaxX'
-              value={this.props.leapMaxX}
-              readOnly />
-            <input
-              className='area-btm'
-              type='text'
-              name='leapMaxY'
-              value={this.props.leapMaxY}
-              readOnly />
-          </p>
 
         </fieldset>
 

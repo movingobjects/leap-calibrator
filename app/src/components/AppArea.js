@@ -37,7 +37,7 @@ export default class AppArea extends React.Component {
   // Methods
 
 
-  // React lifecycle
+  // React
 
   render() {
 

@@ -78,7 +78,7 @@ export default class Calibration extends React.Component {
   }
 
 
-  // React lifecycle
+  // React
 
   render() {
 
