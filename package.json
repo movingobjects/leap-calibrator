@@ -1,14 +1,19 @@
 {
   "name": "leap-calibrator",
   "productName": "Leap Calibrator",
-  "version": "0.1.0",
-  "description": "Tool that allows calibration of Leap Motion controller via LeapJS",
-  "main": "app/src/index.js",
+  "version": "0.2.0",
+  "description": "Tool that allows 2D calibration of Leap Motion controller via LeapJS",
+  "main": "main.js",
   "scripts": {
-    "clean": "rm -rf dist/*",
-    "build": "webpack          --config config/webpack.config.js",
-    "watch": "webpack          --config config/webpack.config.js --watch",
-    "dev": "webpack-dev-server --config config/webpack.config.js --hot --inline --open"
+    "reinstall-modules": "node ./scripts/reinstall-modules.js",
+    "enable-scripts": "node ./scripts/enable-scripts.js",
+    "clear-packages": "./scripts/clear-packages.sh",
+    "watch": "node ./scripts/watch.js",
+    "build": "node ./scripts/build.js",
+    "start": "node ./scripts/start.js",
+    "wine": "./scripts/wine.sh",
+    "package-mac": "./scripts/package-mac.sh",
+    "package-win": "./scripts/package-win.sh"
   },
   "repository": {
     "type": "git",
@@ -24,30 +29,34 @@
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-react": "^6.24.1",
     "copy-webpack-plugin": "4.0.1",
     "css-loader": "0.28.4",
+    "electron": "^1.8.1",
+    "electron-packager": "^10.1.1",
+    "electron-react-devtools": "^0.5.3",
+    "file-loader": "^0.11.2",
     "html-webpack-include-assets-plugin": "0.0.5",
     "html-webpack-plugin": "2.28.0",
-    "node-sass": "4.5.3",
-    "sass-loader": "6.0.5",
+    "node-sass": "^4.7.2",
+    "sass-loader": "^6.0.6",
     "source-map-loader": "0.2.1",
     "style-loader": "0.18.2",
-    "webpack": "2.6.1",
-    "webpack-dev-server": "^2.7.1"
+    "webpack": "^3.10.0",
+    "webpack-dev-server": "^2.11.0",
+    "webpack-merge": "^4.1.1"
   },
   "dependencies": {
+    "classnames": "^2.2.5",
+    "electron-reload": "^1.2.2",
     "leapjs": "^0.6.4",
     "lodash": "4.17.4",
+    "mkdirp": "^0.5.1",
     "react": "15.6.1",
     "react-dom": "15.6.1",
+    "rimraf": "^2.6.2",
     "screenfull": "^3.3.1",
-    "varyd-utils": "^0.5.4",
-    "classnames": "^2.2.5"
-  },
-  "babel": {
-    "presets": [
-      "react"
-    ]
+    "varyd-utils": "^0.5.4"
   }
 }
