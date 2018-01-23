@@ -38,12 +38,14 @@ export default class ControlsPanel extends React.Component {
 
   getAppAreaJSON() {
 
-    return '{\n' +
-      `  xMin: ${this.props.appMinX},\n` +
-      `  xMax: ${this.props.appMaxX},\n` +
-      `  yMin: ${this.props.appMinY},\n` +
-      `  yMax: ${this.props.appMaxY}\n` +
-      '}\n';
+    return `"calibration": {\n` +
+    `  "xMin": ${this.props.appMinX},\n` +
+    `  "xMax": ${this.props.appMaxX},\n` +
+    `  "yMin": ${this.props.appMinY},\n` +
+    `  "yMax": ${this.props.appMaxY},\n` +
+    `  "zMin": -1,\n` +
+    `  "zMax": -1\n` +
+    `}\n`;
 
   }
 
@@ -85,14 +87,14 @@ export default class ControlsPanel extends React.Component {
 
           <br />
 
-          <label>
+          {/*}<label>
             <input
               type='checkbox'
               name='showLeapZone'
               checked={this.props.showLeapZone}
               onChange={this.props.onControlChange} />
             <strong>[L]</strong> Show full leap area
-          </label>
+          </label>*/}
 
         </fieldset>
 
