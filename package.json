@@ -33,7 +33,7 @@
     "babel-preset-react": "^6.24.1",
     "copy-webpack-plugin": "4.0.1",
     "css-loader": "0.28.4",
-    "electron": "^1.8.1",
+    "electron": "^1.7.11",
     "electron-packager": "^10.1.1",
     "electron-react-devtools": "^0.5.3",
     "file-loader": "^0.11.2",
