@@ -3,7 +3,7 @@
   "productName": "Leap Calibrator",
   "version": "0.1.0",
   "description": "Tool that allows calibration of Leap Motion controller via LeapJS",
-  "main": "src/index.js",
+  "main": "app/src/index.js",
   "scripts": {
     "clean": "rm -rf dist/*",
     "build": "webpack          --config config/webpack.config.js",

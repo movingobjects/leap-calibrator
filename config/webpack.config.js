@@ -1,4 +1,6 @@
+
 const path  = require('path');
+
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackIncludeAssetsPlugin = require('html-webpack-include-assets-plugin');
@@ -6,13 +8,13 @@ const HtmlWebpackIncludeAssetsPlugin = require('html-webpack-include-assets-plug
 module.exports = {
 
   entry: {
-      app: './src/index.js'
-    },
+    app: './app/src/entry.js'
+  },
 
-    output: {
-      filename: '[name].bundle.js',
-      path: path.resolve(__dirname, '../dist'),
-    },
+  output: {
+    path: path.resolve(__dirname, '../app/build'),
+    filename: 'resources/scripts/[name].bundle.js',
+  },
 
   devtool: 'source-map',
 
@@ -26,6 +28,7 @@ module.exports = {
 
   module: {
     rules: [
+
       {
         enforce: 'pre',
         test: /\.js$/,
@@ -33,43 +36,32 @@ module.exports = {
       },
 
       {
-        test: /\.js$/,
+        test: /\.jsx?$/,
+        loader: 'babel-loader',
         exclude: /node_modules/,
-        loader: 'babel-loader'
+        options: {
+          presets: ['react'],
+          plugins: ['transform-object-rest-spread'],
+        }
       },
 
       {
         test: /\.scss$/,
         use: [
-          { loader: 'style-loader' }, // creates style nodes from JS strings
-          { loader: 'css-loader' }, // translates CSS into CommonJS
-          { loader: 'sass-loader' } // compiles Sass to CSS
+          { loader: 'style-loader' },
+          { loader: 'css-loader' },
+          { loader: 'sass-loader' }
         ]
       }
+
     ]
   },
 
   plugins: [
-    new CopyWebpackPlugin([
-      { from: 'node_modules/react/dist/react.js', to: 'vendor/react/' },
-      { from: 'node_modules/react-dom/dist/react-dom.js', to: 'vendor/react/' }
-    ]),
     new HtmlWebpackPlugin({
       filename: 'index.html',
-      template: 'src/index.html'
-    }),
-    new HtmlWebpackIncludeAssetsPlugin({
-      assets: [
-        'vendor/react/react.js',
-        'vendor/react/react-dom.js'
-      ],
-      append: false
+      template: 'app/src/index.html'
     })
-  ],
-
-  externals: {
-    'react': 'React',
-    'react-dom': 'ReactDOM'
-  },
+  ]
 
 };
