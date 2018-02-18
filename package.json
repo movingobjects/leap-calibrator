@@ -17,14 +17,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/sccottt/leap-calibrator.git"
+    "url": "https://github.com/movingobjects/leap-calibrator.git"
   },
   "author": "Belle & Wissell, Co.",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/sccottt/leap-calibrator/issues"
+    "url": "https://github.com/movingobjects/leap-calibrator/issues"
   },
-  "homepage": "https://github.com/sccottt/leap-calibrator",
+  "homepage": "https://github.com/movingobjects/leap-calibrator",
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
